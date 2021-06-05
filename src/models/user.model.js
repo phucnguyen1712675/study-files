@@ -44,6 +44,15 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    avatar: {
+      type: String,
+    },
+    shortDescription: {
+      type: String,
+    },
+    detailDescription: {
+      type: String,
+    },
   },
   {
     timestamps: true,
@@ -86,6 +95,6 @@ userSchema.pre('save', async function (next) {
 /**
  * @typedef User
  */
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('users', userSchema, 'users');
 
 module.exports = User;
