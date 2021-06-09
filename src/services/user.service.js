@@ -67,6 +67,23 @@ const updateUserById = async (userId, updateBody) => {
 };
 
 /**
+ * update user password
+ * @param {ObjectId} userId
+ * @param {Object} reqBody
+ * @returns {Promise<String>}
+ */
+const updateUserPassword = async (userId, reqBody) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  if (!(await user.isPasswordMatch(reqBody.oldPassword))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Password not match');
+  }
+  await updateUserById(userId, { password: reqBody.newPassword });
+};
+
+/**
  * Delete user by id
  * @param {ObjectId} userId
  * @returns {Promise<User>}
@@ -86,5 +103,6 @@ module.exports = {
   getUserById,
   getUserByEmail,
   updateUserById,
+  updateUserPassword,
   deleteUserById,
 };

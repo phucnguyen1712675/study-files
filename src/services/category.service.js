@@ -69,7 +69,7 @@ const updateCategoryById = async (categoryId, updateBody) => {
 /**
  * Delete category by id
  * @param {ObjectId} categoryId
- * @returns {Promis<Category>}
+ * @returns {Promise<Category>}
  */
 const deleteCategoryById = async (categoryId) => {
   // TODO : trang // check if have course in this category > sub_category

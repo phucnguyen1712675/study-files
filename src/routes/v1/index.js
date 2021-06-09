@@ -2,6 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./admin.route/user.route');
 const categoryRoute = require('./admin.route/category.route');
+const subCategoryRoute = require('./admin.route/sub_category.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -19,6 +20,10 @@ const defaultRoutes = [
   {
     path: '/admin/categories',
     route: categoryRoute,
+  },
+  {
+    path: '/admin/subCategories',
+    route: subCategoryRoute,
   },
 ];
 
