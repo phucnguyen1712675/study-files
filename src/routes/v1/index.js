@@ -3,6 +3,8 @@ const authRoute = require('./auth.route');
 const userRoute = require('./admin.route/user.route');
 const categoryRoute = require('./admin.route/category.route');
 const subCategoryRoute = require('./admin.route/sub_category.route');
+const courseRoute = require('./guest.route/course.route');
+const myCourseRoute = require('./student.route/my_course.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -24,6 +26,14 @@ const defaultRoutes = [
   {
     path: '/admin/subCategories',
     route: subCategoryRoute,
+  },
+  {
+    path: '/courses',
+    route: courseRoute,
+  },
+  {
+    path: '/student/myCourses',
+    route: myCourseRoute,
   },
 ];
 

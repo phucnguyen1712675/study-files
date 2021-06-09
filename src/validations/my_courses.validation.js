@@ -26,13 +26,13 @@ const getAllMyCourses = {
 
 const getMyCourses = {
   params: Joi.object().keys({
-    myCoursesId: Joi.string().custom(objectId),
+    myCourseId: Joi.string().custom(objectId),
   }),
 };
 
 const deleteMyCourses = {
   params: Joi.object().keys({
-    myCoursesId: Joi.string().custom(objectId),
+    myCourseId: Joi.string().custom(objectId),
   }),
 };
 
