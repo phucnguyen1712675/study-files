@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { SubCategory } = require('../models');
+const { SubCategory, Course } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -77,11 +77,29 @@ const updateSubCategoryById = async (subCategoryId, updateBody) => {
 };
 
 /**
- * update sub category subcriberNumber
+ * increase sub category subcriberNumber
  * @param {ObjectId} subCategoryId
  * @returns {Promise<SubCategory>} result
  */
 const increaseSubcriberNumberSubCategory = async (subCategoryId) => {
+  const subCategory = await getSubCategoryById(subCategoryId);
+  if (!subCategory) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Sub category not found');
+  }
+  const newSubscriberNumber = subCategory.subscriberNumber + 1;
+  Object.assign(subCategory, { subscriberNumber: newSubscriberNumber });
+  await subCategory.save();
+  return subCategory;
+};
+
+/**
+ * increase sub category subcriberNumber by courseId
+ * @param {ObjectId} courseId
+ * @returns {Promise<SubCategory>} result
+ */
+const increaseSubcriberNumberSubCategoryBycourseId = async (courseId) => {
+  const course = await Course.findById(courseId);
+  const { subCategoryId } = course;
   const subCategory = await getSubCategoryById(subCategoryId);
   if (!subCategory) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Sub category not found');
@@ -112,6 +130,7 @@ module.exports = {
   querySubCategories,
   getSubCategoriesByCategoryId,
   increaseSubcriberNumberSubCategory,
+  increaseSubcriberNumberSubCategoryBycourseId,
   getSubCategoryById,
   getSubCategoryByName,
   deleteSubCategoryById,

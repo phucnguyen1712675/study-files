@@ -30,7 +30,7 @@ myCoursesSchema.plugin(paginate);
  * @param {ObjectId} [excludeMycoursesId]
  * @returns {Promise<boolean>}
  */
-myCoursesSchema.statics.isIdTaken = async function (courseId, studentId, excludeMycoursesId) {
+myCoursesSchema.statics.isExists = async function (courseId, studentId, excludeMycoursesId) {
   const myCourse = await this.findOne({ courseId, studentId, _id: { $ne: excludeMycoursesId } });
   return !!myCourse;
 };
