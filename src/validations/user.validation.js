@@ -6,7 +6,7 @@ const createUser = {
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
-    role: Joi.string().required().valid('user', 'admin'),
+    role: Joi.string().required().valid('student', 'teacher', 'admin'),
   }),
 };
 
@@ -32,9 +32,24 @@ const updateUser = {
   }),
   body: Joi.object()
     .keys({
-      email: Joi.string().email(),
+      email: Joi.string().required().email(),
       password: Joi.string().custom(password),
-      name: Joi.string(),
+      name: Joi.string().required(),
+      avatar: Joi.string(),
+      shortDescription: Joi.string(),
+      detailDescription: Joi.string(),
+    })
+    .min(1),
+};
+
+const updateUserPassword = {
+  params: Joi.object().keys({
+    userId: Joi.required().custom(objectId),
+  }),
+  body: Joi.object()
+    .keys({
+      oldPassword: Joi.string().required().custom(password),
+      newPassword: Joi.string().required().custom(password),
     })
     .min(1),
 };
@@ -47,8 +62,9 @@ const deleteUser = {
 
 module.exports = {
   createUser,
-  getUsers,
   getUser,
+  getUsers,
   updateUser,
+  updateUserPassword,
   deleteUser,
 };

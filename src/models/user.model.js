@@ -38,11 +38,20 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       enum: roles,
-      default: 'user',
+      default: 'student',
     },
     isEmailVerified: {
       type: Boolean,
       default: false,
+    },
+    avatar: {
+      type: String,
+    },
+    shortDescription: {
+      type: String,
+    },
+    detailDescription: {
+      type: String,
     },
   },
   {
@@ -86,6 +95,6 @@ userSchema.pre('save', async function (next) {
 /**
  * @typedef User
  */
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('users', userSchema, 'users');
 
 module.exports = User;
