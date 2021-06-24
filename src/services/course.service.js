@@ -8,6 +8,9 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Course>}
  */
 const createCourse = async (courseBody) => {
+  if (await Course.isNameTaken(courseBody.name)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Name already taken');
+  }
   const course = await Course.create(courseBody);
   return course;
 };
@@ -52,6 +55,22 @@ const updateCourseById = async (courseId, updateBody) => {
 };
 
 /**
+ * increase view in course by courseId
+ * @param {ObjectId} courseId
+ * @returns {Promise<Course>}
+ */
+const increaseViewByCourseId = async (courseId) => {
+  const course = await getCourseById(courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'course not found');
+  }
+  const newView = course.view + 1;
+  Object.assign(course, { view: newView });
+  await course.save();
+  return course;
+};
+
+/**
  * Delete course by id
  * @param {ObjectId} courseId
  * @returns {Promise<Course>}
@@ -65,10 +84,28 @@ const deleteCourseById = async (courseId) => {
   return course;
 };
 
+/**
+ * increase subscriberNumber in course by courseId
+ * @param {ObjectId} courseId
+ * @returns {Promise<Course>}
+ */
+const increaseSubscriberNumberByCourseId = async (courseId) => {
+  const course = await getCourseById(courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'course not found');
+  }
+  const newSubscriberNumber = course.subscriberNumber + 1;
+  Object.assign(course, { subscriberNumber: newSubscriberNumber });
+  await course.save();
+  return course;
+};
+
 module.exports = {
   createCourse,
   queryCourses,
   getCourseById,
   updateCourseById,
   deleteCourseById,
+  increaseViewByCourseId,
+  increaseSubscriberNumberByCourseId,
 };

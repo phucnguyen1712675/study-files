@@ -1,7 +1,11 @@
 const express = require('express');
 const authRoute = require('./auth.route');
-const userRoute = require('./user.route');
-const courseRoute = require('./course.route');
+// const courseRoute = require('./course.route');
+const userRoute = require('./admin.route/user.route');
+const categoryRoute = require('./admin.route/category.route');
+const subCategoryRoute = require('./admin.route/sub_category.route');
+const courseRoute = require('./guest.route/course.route');
+const myCourseRoute = require('./student.route/my_course.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -13,12 +17,24 @@ const defaultRoutes = [
     route: authRoute,
   },
   {
-    path: '/users',
+    path: '/admin/users',
     route: userRoute,
+  },
+  {
+    path: '/admin/categories',
+    route: categoryRoute,
+  },
+  {
+    path: '/admin/subCategories',
+    route: subCategoryRoute,
   },
   {
     path: '/courses',
     route: courseRoute,
+  },
+  {
+    path: '/student/myCourses',
+    route: myCourseRoute,
   },
 ];
 

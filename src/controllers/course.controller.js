@@ -1,4 +1,3 @@
-// const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
@@ -11,7 +10,7 @@ const createCourse = catchAsync(async (req, res) => {
 });
 
 const getCourses = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['title']);
+  const filter = pick(req.query, ['name', 'subCategoryId']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await courseService.queryCourses(filter, options);
   res.send(result);
@@ -22,6 +21,7 @@ const getCourse = catchAsync(async (req, res) => {
   if (!course) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
   }
+  courseService.increaseViewByCourseId(req.params.courseId);
   res.send(course);
 });
 
