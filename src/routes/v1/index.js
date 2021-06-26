@@ -6,6 +6,7 @@ const subCategoryRoute = require('./admin.route/sub_category.route');
 const courseRoute = require('./guest.route/course.route');
 const myCourseRoute = require('./student.route/my_course.route');
 const docsRoute = require('./docs.route');
+const studentRoute = require('./student.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -34,6 +35,10 @@ const defaultRoutes = [
   {
     path: '/student/myCourses',
     route: myCourseRoute,
+  },
+  {
+    path: '/students',
+    route: studentRoute,
   },
 ];
 
