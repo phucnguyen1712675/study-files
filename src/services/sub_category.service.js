@@ -116,7 +116,6 @@ const increaseSubcriberNumberSubCategoryBycourseId = async (courseId) => {
  * @returns {Promise<SubCategory>}
  */
 const deleteSubCategoryById = async (subCategoryId) => {
-  // TODO : trang //check if have course in this
   const subCategory = await getSubCategoryById(subCategoryId);
   if (!subCategory) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Sub category not found');

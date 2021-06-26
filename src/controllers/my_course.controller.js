@@ -18,7 +18,7 @@ const getAllMyCourseOfStudent = catchAsync(async (req, res) => {
 // đề không yêu cầu
 // const getMyCourses = catchAsync(async (req, res) => {
 //   const filter = pick(req.query, ['courseId', 'studentId']);
-//   const options = pick(req.requry, ['sortBy', 'limit', 'page']);
+//   const options = pick(req.query, ['sortBy', 'limit', 'page']);
 //   const result = await myCourseService.queryMyCourse(filter, options);
 //   res.send(result);
 // });

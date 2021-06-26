@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { categoryService } = require('../services');
+const { categoryService, subCategoryService } = require('../services');
 
 const createCategory = catchAsync(async (req, res) => {
   const category = await categoryService.createCategory(req.body);
@@ -11,7 +11,7 @@ const createCategory = catchAsync(async (req, res) => {
 
 const getCategories = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name']);
-  const options = pick(req.requry, ['sortBy', 'limit', 'page']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await categoryService.queryCategories(filter, options);
   res.send(result);
 });
@@ -30,6 +30,10 @@ const updateCategory = catchAsync(async (req, res) => {
 });
 
 const deleteCategory = catchAsync(async (req, res) => {
+  const subCategories = await subCategoryService.getSubCategoriesByCategoryId(req.params.categoryId);
+  if (subCategories.length !== 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'cannot delete because of exists sub categories');
+  }
   await categoryService.deleteCategoryById(req.params.categoryId);
   res.status(httpStatus.NO_CONTENT).send();
 });

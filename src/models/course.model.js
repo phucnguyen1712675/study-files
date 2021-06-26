@@ -21,6 +21,18 @@ const courseSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    originalFee: {
+      type: Number,
+      required: true,
+    },
+    fee: {
+      type: Number,
+      required: true,
+    },
+    promotionEnd: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
@@ -50,6 +62,6 @@ courseSchema.pre('save', async function (next) {
 /**
  * @typedef Course
  */
-const Course = mongoose.model('courses_trang', courseSchema, 'courses_trang');
+const Course = mongoose.model('courses', courseSchema, 'courses');
 
 module.exports = Course;

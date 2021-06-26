@@ -72,7 +72,6 @@ const updateCategoryById = async (categoryId, updateBody) => {
  * @returns {Promise<Category>}
  */
 const deleteCategoryById = async (categoryId) => {
-  // TODO : trang // check if have course in this category > sub_category
   const category = await getCategoryById(categoryId);
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');

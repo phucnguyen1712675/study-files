@@ -1,10 +1,16 @@
 const express = require('express');
 const authRoute = require('./auth.route');
-const userRoute = require('./admin.route/user.route');
-const categoryRoute = require('./admin.route/category.route');
-const subCategoryRoute = require('./admin.route/sub_category.route');
-const courseRoute = require('./guest.route/course.route');
-const myCourseRoute = require('./student.route/my_course.route');
+// admin route
+const adminUserRoute = require('./admin.route/user.route');
+const adminCategoryRoute = require('./admin.route/category.route');
+const adminSubCategoryRoute = require('./admin.route/sub_category.route');
+const adminCourseRoute = require('./admin.route/course.route');
+// student route
+const studentMyCourseRoute = require('./student.route/my_course.route');
+// guest route
+const guestCourseRoute = require('./guest.route/course.route');
+const guestCategoryRoute = require('./guest.route/category.route');
+const guestSubCategoryRoute = require('./guest.route/sub_category.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -15,25 +21,40 @@ const defaultRoutes = [
     path: '/auth',
     route: authRoute,
   },
+  // admin route
   {
     path: '/admin/users',
-    route: userRoute,
+    route: adminUserRoute,
+  },
+  {
+    path: '/admin/courses',
+    route: adminCourseRoute,
   },
   {
     path: '/admin/categories',
-    route: categoryRoute,
+    route: adminCategoryRoute,
   },
   {
     path: '/admin/subCategories',
-    route: subCategoryRoute,
+    route: adminSubCategoryRoute,
   },
-  {
-    path: '/courses',
-    route: courseRoute,
-  },
+  // student route
   {
     path: '/student/myCourses',
-    route: myCourseRoute,
+    route: studentMyCourseRoute,
+  },
+  // guest route
+  {
+    path: '/courses',
+    route: guestCourseRoute,
+  },
+  {
+    path: '/categories',
+    route: guestCategoryRoute,
+  },
+  {
+    path: '/subCategories',
+    route: guestSubCategoryRoute,
   },
 ];
 

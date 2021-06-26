@@ -39,6 +39,16 @@ const getCourseById = async (id) => {
 };
 
 /**
+ * get course by subCategoryId
+ * @param {ObjectId} subCategoryId
+ * @returns {Promise<QueryResult>}
+ */
+const getCoursesBySubCategoryId = async (subCategoryId) => {
+  const courses = Course.find({ subCategoryId });
+  return courses;
+};
+
+/**
  * increase view in course by courseId
  * @param {ObjectId} courseId
  * @returns {Promise<Course>}
@@ -74,6 +84,7 @@ module.exports = {
   getCourseById,
   queryCourses,
   createCourse,
+  getCoursesBySubCategoryId,
   increaseViewByCourseId,
   increaseSubscriberNumberByCourseId,
 };

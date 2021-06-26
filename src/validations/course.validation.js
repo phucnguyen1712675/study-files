@@ -5,6 +5,11 @@ const createCourse = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     subCategoryId: Joi.string().required(),
+    fee: Joi.number().required(),
+    originalFee: Joi.number().required(),
+    promotionEnd: Joi.date(),
+    // subscriberNumber: Joi.number(),
+    // view: Joi.number(),
   }),
 };
 
@@ -12,6 +17,7 @@ const getCourses = {
   query: Joi.object().keys({
     name: Joi.string(),
     subCategoryId: Joi.string(),
+    createdAt: Joi.date(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
