@@ -11,7 +11,7 @@ const createCourse = catchAsync(async (req, res) => {
 
 const getCourses = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'subCategoryId']);
-  const options = pick(req.requry, ['sortBy', 'limit', 'page']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await courseService.queryCourses(filter, options);
   res.send(result);
 });
