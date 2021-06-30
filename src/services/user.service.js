@@ -15,19 +15,39 @@ const createUser = async (userBody) => {
   return user;
 };
 
+// /**
+//  * Query for users
+//  * @param {Object} filter - Mongo filter
+//  * @param {Object} options - Query options
+//  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+//  * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+//  * @param {number} [options.page] - Current page (default = 1)
+//  * @returns {Promise<QueryResult>}
+//  */
+// const queryUsers = async (filter, options) => {
+//   const users = await User.paginate(filter, options);
+//   return users;
+// };
+
 /**
  * Query for users
  * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
+const queryUsers = async (filter) => {
+  const users = await User.find(filter);
   return users;
 };
+
+// /**
+//  * get all user with role
+//  * @param {Object} filter - Mongo filter
+//  * @returns  {Promise<QueryResult>}
+//  */
+// const getAllUser = async (filter) => {
+//   const users = await User.find(filter);
+//   return users;
+// };
 
 /**
  * Get user by id
@@ -100,6 +120,7 @@ const deleteUserById = async (userId) => {
 module.exports = {
   createUser,
   queryUsers,
+  // getAllUser,
   getUserById,
   getUserByEmail,
   updateUserById,
