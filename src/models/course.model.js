@@ -50,6 +50,6 @@ courseSchema.pre('save', async function (next) {
 /**
  * @typedef Course
  */
-const Course = mongoose.model('courses', courseSchema, 'Course');
+const Course = mongoose.model('courses', courseSchema, 'courses');
 
 module.exports = Course;

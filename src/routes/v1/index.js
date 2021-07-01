@@ -7,6 +7,7 @@ const courseRoute = require('./guest.route/course.route');
 const myCourseRoute = require('./student.route/my_course.route');
 const docsRoute = require('./docs.route');
 const studentRoute = require('./student.route');
+const watchListRoute = require('./student.route/my_watch_list.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -39,6 +40,10 @@ const defaultRoutes = [
   {
     path: '/students',
     route: studentRoute,
+  },
+  {
+    path: '/student/watchList',
+    route: watchListRoute,
   },
 ];
 
