@@ -14,14 +14,24 @@ const subCategorySchema = mongoose.Schema(
     },
     categoryId: {
       type: String,
-      required: true,
       trim: true,
+      required: true,
     },
   },
   {
     timestamps: true,
   }
 );
+
+subCategorySchema.virtual('category', {
+  ref: 'Category',
+  localField: 'categoryId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+subCategorySchema.set('toObject', { virtuals: true });
+subCategorySchema.set('toJSON', { virtuals: true });
 
 // add plugin that converts mongoose to json
 subCategorySchema.plugin(toJSON);
@@ -38,9 +48,9 @@ subCategorySchema.statics.isNameTaken = async function (name, excludeSubCategory
   return !!subCategory;
 };
 
-subCategorySchema.pre('save', async function (next) {
-  next();
-});
+// subCategorySchema.pre('save', async function (next) {
+//   next();
+// });
 
 /**
  * @typedef SubCategory

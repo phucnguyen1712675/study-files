@@ -11,19 +11,15 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('manageCategories'), validate(categoryValidation.createCategory), categoryController.createCategory) // thêm category
-  .get(auth('manageCategories'), validate(categoryValidation.getCategories), categoryController.getCategories); // query search category
+  .get(categoryController.getCategories); // query search category
 
 router
   .route('/:categoryId')
-  .get(auth('manageCategories'), validate(categoryValidation.getCategory), categoryController.getCategory) // xem chi tiết category
+  .get(validate(categoryValidation.getCategory), categoryController.getCategory) // xem chi tiết category
   .patch(auth('manageCategories'), validate(categoryValidation.updateCategory), categoryController.updateCategory) // update category
   .delete(auth('manageCategories'), validate(categoryValidation.deleteCategory), categoryController.deleteCategory); // xóa category
 
 router
   .route('/:categoryId/subCategories')
-  .get(
-    auth('manageCategories'),
-    validate(subCategoryValidation.getSubCategoriesByCategoryId),
-    subCategoryController.getSubCategoriesByCategoryId
-  ); // get all sub categories in this category
+  .get(validate(subCategoryValidation.getSubCategoriesByCategoryId), subCategoryController.getSubCategoriesByCategoryId); // get all sub categories in this category
 module.exports = router;

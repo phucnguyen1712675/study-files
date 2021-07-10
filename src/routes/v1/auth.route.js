@@ -16,7 +16,11 @@ router.post('/forgot-password', validate(authValidation.forgotPassword), authCon
 router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 router.post('/send-verification-email', auth(), authController.sendVerificationEmail);
 router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);
-router.patch('/update-password/:userId', validate(userValidation.updateUserPassword), userController.updateUserPassword);
+router
+  .route('/update-password/:userId')
+  .patch(auth('manageUsers'), validate(userValidation.updateUserPassword), userController.updateUserPassword);
+
+router.route('/update/:userId').patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser);
 
 module.exports = router;
 
