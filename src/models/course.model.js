@@ -38,9 +38,11 @@ const courseSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    promotionStart: {
+      type: Date,
+    },
     promotionEnd: {
       type: Date,
-      default: Date.now,
     },
   },
   {
