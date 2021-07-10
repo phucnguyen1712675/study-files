@@ -29,13 +29,13 @@ categorySchema.statics.isNameTaken = async function (name, excludeCategoryId) {
   return !!category;
 };
 
-categorySchema.pre('save', async function (next) {
-  next();
-});
+// categorySchema.pre('save', async function (next) {
+//   next();
+// });
 
 /**
  * @typedef Category
  */
-const Category = mongoose.model('categories', categorySchema, 'categories');
+const Category = mongoose.model('Category', categorySchema);
 
 module.exports = Category;

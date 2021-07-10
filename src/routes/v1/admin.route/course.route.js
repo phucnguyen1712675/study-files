@@ -6,7 +6,7 @@ const courseController = require('../../../controllers/course.controller');
 
 const router = express.Router();
 
-router.route('/').get(auth('manageCourses'), validate(courseValidation.getCourses), courseController.getCourses);
+router.route('/').get(courseController.getAllCourses);
 
 router
   .route('/:courseId')

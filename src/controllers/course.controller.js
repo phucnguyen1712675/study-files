@@ -16,6 +16,11 @@ const getCourses = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getAllCourses = catchAsync(async (req, res) => {
+  const result = await courseService.getAllCourses();
+  res.send(result);
+});
+
 const getCourse = catchAsync(async (req, res) => {
   const course = await courseService.getCourseById(req.params.courseId);
   if (!course) {
@@ -36,6 +41,7 @@ const deleteCourse = catchAsync(async (req, res) => {
 
 module.exports = {
   createCourse,
+  getAllCourses,
   getCourses,
   getCourse,
   deleteCourse,

@@ -13,11 +13,20 @@ const courseSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    teacherId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     subscriberNumber: {
       type: Number,
       default: 0,
     },
     view: {
+      type: Number,
+      default: 0,
+    },
+    rating: {
       type: Number,
       default: 0,
     },
@@ -38,6 +47,23 @@ const courseSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+courseSchema.virtual('subCategory', {
+  ref: 'subCategories',
+  localField: 'subCategoryId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+courseSchema.virtual('teacher', {
+  ref: 'User',
+  localField: 'teacherId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+courseSchema.set('toObject', { virtuals: true });
+courseSchema.set('toJSON', { virtuals: true });
 
 // add plugin that converts mongoose to json
 courseSchema.plugin(toJSON);
