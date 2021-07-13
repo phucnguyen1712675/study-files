@@ -15,6 +15,7 @@ const createCourse = {
 
 const getCourses = {
   query: Joi.object().keys({
+    query: Joi.string(),
     name: Joi.string(),
     subCategoryId: Joi.string(),
     createdAt: Joi.date(),
