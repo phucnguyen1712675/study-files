@@ -10,6 +10,7 @@ const courseSchema = mongoose.Schema(
     },
     subCategoryId: {
       type: String,
+      // index: true,
       required: true,
       trim: true,
     },
@@ -49,6 +50,7 @@ const courseSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+courseSchema.index({ name: 'text' });
 
 courseSchema.virtual('subCategory', {
   ref: 'subCategories',
