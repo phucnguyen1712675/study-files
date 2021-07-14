@@ -10,6 +10,12 @@ const courseSchema = mongoose.Schema(
     },
     subCategoryId: {
       type: String,
+      // index: true,
+      required: true,
+      trim: true,
+    },
+    teacherId: {
+      type: String,
       required: true,
       trim: true,
     },
@@ -21,11 +27,47 @@ const courseSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    originalFee: {
+      type: Number,
+      required: true,
+    },
+    fee: {
+      type: Number,
+      required: true,
+    },
+    promotionStart: {
+      type: Date,
+    },
+    promotionEnd: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
   }
 );
+courseSchema.index({ name: 'text' });
+
+courseSchema.virtual('subCategory', {
+  ref: 'subCategories',
+  localField: 'subCategoryId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+courseSchema.virtual('teacher', {
+  ref: 'User',
+  localField: 'teacherId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+courseSchema.set('toObject', { virtuals: true });
+courseSchema.set('toJSON', { virtuals: true });
 
 // add plugin that converts mongoose to json
 courseSchema.plugin(toJSON);

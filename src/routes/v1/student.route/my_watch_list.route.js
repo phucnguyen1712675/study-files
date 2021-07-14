@@ -8,12 +8,12 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageMyCourses'), validate(watchListValidation.createWatchList), watchListController.createWatchList);
+  .post(auth('manageWatchList'), validate(watchListValidation.createWatchList), watchListController.createWatchList);
 
 router
   .route('/:studentId')
   .get(
-    auth('manageMyCourses'),
+    auth('manageWatchList'),
     validate(watchListValidation.getAllWatchListOfStudent),
     watchListController.getAllWatchListOfStudent
   );

@@ -14,16 +14,6 @@ const getSubCategory = {
   }),
 };
 
-const getSubCategories = {
-  query: Joi.object().keys({
-    name: Joi.string(),
-    categoryId: Joi.string(),
-    sortBy: Joi.string(),
-    limit: Joi.number().integer(),
-    page: Joi.number().integer(),
-  }),
-};
-
 const getSubCategoriesByCategoryId = {
   params: Joi.object().keys({
     categoryId: Joi.string().custom(objectId),
@@ -37,6 +27,7 @@ const updateSubCategory = {
   body: Joi.object()
     .keys({
       name: Joi.string().required(),
+      categoryId: Joi.custom(objectId),
     })
     .min(1),
 };
@@ -56,7 +47,6 @@ const deleteSubCategory = {
 module.exports = {
   createSubCategory,
   getSubCategory,
-  getSubCategories,
   getSubCategoriesByCategoryId,
   updateSubCategory,
   increaseSubcriberNumberSubCategory,

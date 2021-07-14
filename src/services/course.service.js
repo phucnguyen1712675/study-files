@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Course } = require('../models');
+const { Course, SubCategory } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -16,6 +16,17 @@ const createCourse = async (courseBody) => {
 };
 
 /**
+ * Get all courses in system
+ * @returns {Promise<QueryResult>}
+ */
+const getAllCourses = async () => {
+  const courses = await Course.find()
+    .populate({ path: 'subCategory', select: 'name' })
+    .populate({ path: 'teacher', select: 'name' });
+  return courses;
+};
+
+/**
  * Query for courses
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
@@ -24,7 +35,19 @@ const createCourse = async (courseBody) => {
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryCourses = async (filter, options) => {
+const queryCourses = async (query, filter, options) => {
+  // eslint-disable-next-line no-param-reassign
+  options.populate = 'teacher, subCategory';
+  if (query) {
+    const subCategories = await SubCategory.find({ $text: { $search: `"${query}"` } });
+    let orArray = [{ $text: { $search: `"${query}"` } }];
+    subCategories.forEach((subCategory) => {
+      orArray = [...orArray, { subCategoryId: subCategory.id }];
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    filter.$or = [...orArray];
+  }
   const courses = await Course.paginate(filter, options);
   return courses;
 };
@@ -36,6 +59,30 @@ const queryCourses = async (filter, options) => {
  */
 const getCourseById = async (id) => {
   return Course.findById(id);
+};
+
+/**
+ * get course by subCategoryId
+ * @param {ObjectId} subCategoryId
+ * @returns {Promise<QueryResult>}
+ */
+const getCoursesBySubCategoryId = async (subCategoryId) => {
+  const courses = Course.find({ subCategoryId });
+  return courses;
+};
+
+/**
+ * Delete course by id
+ * @param {ObjectId} courseId
+ * @returns {Promise<Course>}
+ */
+const deleteCourse = async (courseId) => {
+  const course = await getCourseById(courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+  }
+  await course.remove();
+  return course;
 };
 
 /**
@@ -72,8 +119,11 @@ const increaseSubscriberNumberByCourseId = async (courseId) => {
 
 module.exports = {
   getCourseById,
+  getAllCourses,
   queryCourses,
   createCourse,
+  deleteCourse,
+  getCoursesBySubCategoryId,
   increaseViewByCourseId,
   increaseSubscriberNumberByCourseId,
 };
