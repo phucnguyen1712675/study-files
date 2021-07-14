@@ -63,19 +63,6 @@ const defaultRoutes = [
     path: '/subCategories',
     route: guestSubCategoryRoute,
   },
-  // guest route
-  {
-    path: '/courses',
-    route: guestCourseRoute,
-  },
-  {
-    path: '/categories',
-    route: guestCategoryRoute,
-  },
-  {
-    path: '/subCategories',
-    route: guestSubCategoryRoute,
-  },
   {
     path: '/ratings',
     route: ratingRoute,

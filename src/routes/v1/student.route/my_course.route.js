@@ -17,5 +17,8 @@ router
     validate(myCourseValidation.getAllMyCoursesOfStudent),
     myCourseController.getAllMyCourseOfStudent
   );
+router
+  .route('/:myCourseId')
+  .delete(auth('manageMyCourses'), validate(myCourseValidation.deleteMyCourses), myCourseController.deleteMyCourse);
 
 module.exports = router;
