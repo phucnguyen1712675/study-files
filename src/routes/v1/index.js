@@ -8,6 +8,8 @@ const myCourseRoute = require('./student.route/my_course.route');
 const docsRoute = require('./docs.route');
 const studentRoute = require('./student.route');
 const watchListRoute = require('./student.route/my_watch_list.route');
+const ratingRoute = require('./guest.route/rating.route');
+const feedbackRoute = require('./guest.route/feedback.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -44,6 +46,14 @@ const defaultRoutes = [
   {
     path: '/student/watchList',
     route: watchListRoute,
+  },
+  {
+    path: '/ratings',
+    route: ratingRoute,
+  },
+  {
+    path: '/feedbacks',
+    route: feedbackRoute,
   },
 ];
 

@@ -5,3 +5,5 @@ module.exports.SubCategory = require('./sub_category.model');
 module.exports.WatchList = require('./watch_list.model');
 module.exports.MyCourse = require('./my_courses.model');
 module.exports.Course = require('./course.model');
+module.exports.Ratings = require('./rating.model');
+module.exports.Feedbacks = require('./feedback.model');
