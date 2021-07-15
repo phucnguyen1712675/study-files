@@ -58,7 +58,7 @@ const queryCourses = async (query, filter, options) => {
  * @returns {Promise<Course>}
  */
 const getCourseById = async (id) => {
-  return Course.findById(id);
+  return Course.findById(id).populate({ path: 'subCategory', select: 'name' }).populate({ path: 'teacher', select: 'name' });
 };
 
 /**
