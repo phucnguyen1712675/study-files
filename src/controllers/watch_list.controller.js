@@ -20,7 +20,7 @@ const updateWatchList = catchAsync(async (req, res) => {
 });
 
 const deleteWatchList = catchAsync(async (req, res) => {
-  await watchListService.deletewatchListById(req.params.userId);
+  await watchListService.deleteWatchListById(req.params.watchListId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
