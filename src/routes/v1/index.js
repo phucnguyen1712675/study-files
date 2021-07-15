@@ -8,6 +8,8 @@ const adminCourseRoute = require('./admin.route/course.route');
 // student route
 const studentMyCourseRoute = require('./student.route/my_course.route');
 const watchListRoute = require('./student.route/my_watch_list.route');
+const ratingRoute = require('./guest.route/rating.route');
+const feedbackRoute = require('./guest.route/feedback.route');
 // guest route
 const guestCourseRoute = require('./guest.route/course.route');
 const guestCategoryRoute = require('./guest.route/category.route');
@@ -60,6 +62,14 @@ const defaultRoutes = [
   {
     path: '/subCategories',
     route: guestSubCategoryRoute,
+  },
+  {
+    path: '/ratings',
+    route: ratingRoute,
+  },
+  {
+    path: '/feedbacks',
+    route: feedbackRoute,
   },
 ];
 

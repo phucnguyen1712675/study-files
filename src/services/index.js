@@ -7,3 +7,5 @@ module.exports.subCategoryService = require('./sub_category.service');
 module.exports.courseService = require('./course.service');
 module.exports.myCourseService = require('./my_courses.service');
 module.exports.watchListService = require('./watch_list.service');
+module.exports.ratingService = require('./rating.service');
+module.exports.feedbackService = require('./feedback.service');
