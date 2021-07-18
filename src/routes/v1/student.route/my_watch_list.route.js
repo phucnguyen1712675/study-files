@@ -17,9 +17,6 @@ router
     validate(watchListValidation.getAllWatchListOfStudent),
     watchListController.getAllWatchListOfStudent
   );
-router
-  .route('/:watchListId')
-  .delete(auth('manageWatchList'), validate(watchListValidation.deleteWatchList), watchListController.deleteWatchList);
 
 router
   .route('/:watchListId')
