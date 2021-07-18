@@ -1,6 +1,6 @@
-// const httpStatus = require('http-status');
+const httpStatus = require('http-status');
 const { Feedbacks } = require('../models');
-// const ApiError = require('../utils/ApiError');
+const ApiError = require('../utils/ApiError');
 
 /**
  * create a feedback
@@ -8,35 +8,25 @@ const { Feedbacks } = require('../models');
  * @returns {Promise<Feedback>}
  */
 const createFeedback = async (feedbackBody) => {
+  if (await Feedbacks.isFeedBacked(feedbackBody.teacherId, feedbackBody.ratingId)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You have feedback this rating');
+  }
   const feedback = await Feedbacks.create(feedbackBody);
-  return feedback;
+  const result = await Feedbacks.findById(feedback.id).populate({ path: 'teacher', select: ['name', 'avatar'] });
+  return result;
 };
 
 /**
- * Query for feedback
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
+ * getRatings
+ * @param {ObjectId} courseId
  * @returns {Promise<QueryResult>}
  */
-const queryFeedbacks = async (filter, options) => {
-  const feedbacks = await Feedbacks.paginate(filter, options);
-  return feedbacks;
-};
-
-/**
- * Get feedback by id
- * @param {ObjectId} id
- * @returns {Promise<Course>}
- */
-const getFeedbackById = async (id) => {
-  return Feedbacks.findById(id);
+const getFeedBacks = async (courseId) => {
+  const ratings = await Feedbacks.find({ courseId }).populate({ path: 'teacher', select: ['name', 'avatar'] });
+  return ratings;
 };
 
 module.exports = {
-  getFeedbackById,
-  queryFeedbacks,
   createFeedback,
+  getFeedBacks,
 };

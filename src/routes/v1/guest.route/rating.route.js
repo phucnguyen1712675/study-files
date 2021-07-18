@@ -7,10 +7,8 @@ const auth = require('../../../middlewares/auth');
 const router = express.Router();
 
 router
-  .route('/')
-  .post(auth('manageRating'), validate(ratingValidation.createRating), ratingController.createRating)
+  .route('/:courseId')
+  .post(auth('manageRatings'), validate(ratingValidation.createRating), ratingController.createRating)
   .get(validate(ratingValidation.getRatings), ratingController.getRatings);
-
-router.route('/:courseId').get(validate(ratingValidation.getRating), ratingController.getRating);
 
 module.exports = router;

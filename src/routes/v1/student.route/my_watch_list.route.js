@@ -18,4 +18,8 @@ router
     watchListController.getAllWatchListOfStudent
   );
 
+router
+  .route('/:watchListId')
+  .delete(auth('manageWatchList'), validate(watchListValidation.deleteWatchList), watchListController.deleteWatchList);
+
 module.exports = router;

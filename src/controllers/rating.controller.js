@@ -1,32 +1,22 @@
 const httpStatus = require('http-status');
-const pick = require('../utils/pick');
-const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { ratingService } = require('../services');
+const { ratingService, courseService } = require('../services');
 
 const createRating = catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
   const rating = await ratingService.createRating(req.body);
+  // eslint-disable-next-line no-unused-vars
+  const course = await courseService.updateRatingAndRatingCount(req.body.courseId, req.body.score);
   res.status(httpStatus.CREATED).send(rating);
 });
 
 const getRatings = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'subCategoryId']);
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await ratingService.queryRatings(filter, options);
+  const { courseId } = req.params;
+  const result = await ratingService.getRatings(courseId);
   res.send(result);
-});
-
-const getRating = catchAsync(async (req, res) => {
-  const rating = await ratingService.getRatingById(req.params.ratingId);
-  if (!rating) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Rating not found');
-  }
-  // ratingService.increaseViewByCourseId(req.params.courseId);
-  res.send(rating);
 });
 
 module.exports = {
   createRating,
   getRatings,
-  getRating,
 };
