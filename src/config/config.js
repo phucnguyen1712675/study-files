@@ -26,22 +26,20 @@ const envVarsSchema = Joi.object()
   })
   .unknown();
 
-// const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
+const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
 
-// if (error) {
-//   throw new Error(`Config validation error: ${error.message}`);
-// }
-
-const { value: envVars } = envVarsSchema.prefs({ errors: { label: 'key' } }); // .validate(process.env);
+if (error) {
+  throw new Error(`Config validation error: ${error.message}`);
+}
 
 module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   mongoose: {
-    // url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
-    url: `mongodb+srv://phucadmin:mimi1234@study-files-cluster.eu58v.mongodb.net/study-files?retryWrites=true&w=majority${
-      envVars.NODE_ENV === 'test' ? '-test' : ''
-    }`,
+    url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
+    // url: `mongodb+srv://phucadmin:mimi1234@study-files-cluster.eu58v.mongodb.net/study-files?retryWrites=true&w=majority${
+    //   envVars.NODE_ENV === 'test' ? '-test' : ''
+    // }`,
     options: {
       useCreateIndex: true,
       useNewUrlParser: true,
