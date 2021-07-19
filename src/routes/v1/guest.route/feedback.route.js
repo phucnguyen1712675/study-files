@@ -7,10 +7,8 @@ const auth = require('../../../middlewares/auth');
 const router = express.Router();
 
 router
-  .route('/')
-  .post(auth('manageFeedback'), validate(feedbackValidation.createFeedback), feedbackController.createFeedback)
+  .route('/:courseId')
+  .post(auth('manageFeedbacks'), validate(feedbackValidation.createFeedback), feedbackController.createFeedback)
   .get(validate(feedbackValidation.getFeedbacks), feedbackController.getFeedbacks);
-
-router.route('/:courseId').get(validate(feedbackValidation.getFeedback), feedbackController.getFeedback);
 
 module.exports = router;

@@ -1,6 +1,6 @@
-// const httpStatus = require('http-status');
+const httpStatus = require('http-status');
 const { Ratings } = require('../models');
-// const ApiError = require('../utils/ApiError');
+const ApiError = require('../utils/ApiError');
 
 /**
  * create a rating
@@ -8,67 +8,31 @@ const { Ratings } = require('../models');
  * @returns {Promise<Rating>}
  */
 const createRating = async (ratingBody) => {
+  if (await Ratings.isRated(ratingBody.studentId, ratingBody.courseId)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You have rated this course');
+  }
   const rating = await Ratings.create(ratingBody);
-  return rating;
+  const result = await Ratings.findById(rating.id).populate({
+    path: 'student',
+    select: 'name',
+  });
+  return result;
 };
 
 /**
- * Query for ratings
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
+ * getRatings
+ * @param {ObjectId} courseId
  * @returns {Promise<QueryResult>}
  */
-const queryRatings = async (filter, options) => {
-  const ratings = await Ratings.paginate(filter, options);
+const getRatings = async (courseId) => {
+  const ratings = await Ratings.find({ courseId }).populate({
+    path: 'student',
+    select: 'name',
+  });
   return ratings;
 };
 
-/**
- * Get rating by id
- * @param {ObjectId} id
- * @returns {Promise<Course>}
- */
-const getRatingById = async (id) => {
-  return Ratings.findById(id);
-};
-
-/**
- * increase view in rating by ratingId
- * @param {ObjectId} ratingId
- * @returns {Promise<Course>}
- */
-/* const increaseViewByCourseId = async (courseId) => {
-  const course = await getCourseById(courseId);
-  if (!course) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'course not found');
-  }
-  const newView = course.view + 1;
-  Object.assign(course, { view: newView });
-  await course.save();
-  return course;
-}; */
-
-/**
- * increase subscriberNumber in course by courseId
- * @param {ObjectId} courseId
- * @returns {Promise<Course>}
- */
-/* const increaseSubscriberNumberByCourseId = async (courseId) => {
-  const course = await getCourseById(courseId);
-  if (!course) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'course not found');
-  }
-  const newSubscriberNumber = course.subscriberNumber + 1;
-  Object.assign(course, { subscriberNumber: newSubscriberNumber });
-  await course.save();
-  return course;
-}; */
-
 module.exports = {
-  getRatingById,
-  queryRatings,
   createRating,
+  getRatings,
 };

@@ -58,7 +58,9 @@ const queryCourses = async (query, filter, options) => {
  * @returns {Promise<Course>}
  */
 const getCourseById = async (id) => {
-  return Course.findById(id).populate({ path: 'subCategory', select: 'name' }).populate({ path: 'teacher', select: 'name' });
+  return Course.findById(id)
+    .populate({ path: 'subCategory', select: 'name categoryId' })
+    .populate({ path: 'teacher', select: 'name' });
 };
 
 /**
@@ -117,6 +119,25 @@ const increaseSubscriberNumberByCourseId = async (courseId) => {
   return course;
 };
 
+/**
+ * update rating and rating count
+ *  @param {ObjectId} courseId
+ *  @param {Number} score
+ *  @returns {Promise<Course>}
+ */
+const updateRatingAndRatingCount = async (courseId, score) => {
+  const course = await getCourseById(courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'course not found');
+  }
+  let newRating = (course.rating * course.ratingCount + score) / (course.ratingCount + 1);
+  newRating = Math.round((newRating + Number.EPSILON) * 10) / 10;
+  const newRatingCount = course.ratingCount + 1;
+  Object.assign(course, { rating: newRating, ratingCount: newRatingCount });
+  await course.save();
+  return course;
+};
+
 module.exports = {
   getCourseById,
   getAllCourses,
@@ -126,4 +147,5 @@ module.exports = {
   getCoursesBySubCategoryId,
   increaseViewByCourseId,
   increaseSubscriberNumberByCourseId,
+  updateRatingAndRatingCount,
 };

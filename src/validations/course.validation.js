@@ -18,6 +18,7 @@ const getCourses = {
     query: Joi.string(),
     name: Joi.string(),
     subCategoryId: Joi.string(),
+    teacherId: Joi.string(),
     createdAt: Joi.date(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),

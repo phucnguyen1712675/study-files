@@ -10,7 +10,7 @@ const courseSchema = mongoose.Schema(
     },
     subCategoryId: {
       type: String,
-      // index: true,
+      index: true,
       required: true,
       trim: true,
     },
@@ -45,6 +45,27 @@ const courseSchema = mongoose.Schema(
     promotionEnd: {
       type: Date,
     },
+    ratingCount: {
+      type: Number,
+      default: 0,
+    },
+    image: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    shortDescription: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    detailDescription: {
+      type: String,
+      required: true,
+      // trim: true,
+    },
+    status: { type: Boolean, default: false },
+    updated_at: { type: Date },
   },
   {
     timestamps: true,
@@ -85,6 +106,7 @@ courseSchema.statics.isNameTaken = async function (name, excludeCourseId) {
 };
 
 courseSchema.pre('save', async function (next) {
+  this.updated_at = Date.now();
   next();
 });
 
