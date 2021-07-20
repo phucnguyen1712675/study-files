@@ -47,11 +47,10 @@ If you did not request any password resets, then ignore this email.`;
  */
 const sendVerificationEmail = async (to, token) => {
   const subject = 'Email Verification';
-  // replace this url with the link to the email verification page of your front-end app
-  const verificationEmailUrl = `http://link-to-app/verify-email?token=${token}`;
+  const verificationEmailUrl = token;
   const text = `Dear user,
-To verify your email, click on this link: ${verificationEmailUrl}
-If you did not create an account, then ignore this email.`;
+To verify your email, copy this otp: ${verificationEmailUrl} and paste to verify email page
+If you did not create an account, then ignore this email. from Study files web.`;
   await sendEmail(to, subject, text);
 };
 
