@@ -73,7 +73,7 @@ const getUserByEmail = async (email) => {
  * @param {Object} updateBody
  * @returns {Promise<User>}
  */
-const updateUserById = async (userId, updateBody) => {
+const updateUserById = async (userId, updateBody, isUpdateUserInfo) => {
   const user = await getUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
@@ -81,10 +81,13 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  if (user.email !== updateBody.email) {
-    // eslint-disable-next-line no-param-reassign
-    updateBody = { ...updateBody, isEmailVerified: false };
+  if (updateBody.email && isUpdateUserInfo) {
+    if (user.email !== updateBody.email) {
+      // eslint-disable-next-line no-param-reassign
+      updateBody = { ...updateBody, isEmailVerified: false };
+    }
   }
+
   Object.assign(user, updateBody);
   await user.save();
   return user;
@@ -104,7 +107,7 @@ const updateUserPassword = async (userId, reqBody) => {
   if (!(await user.isPasswordMatch(reqBody.oldPassword))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Password not match');
   }
-  await updateUserById(userId, { password: reqBody.newPassword });
+  await updateUserById(userId, { password: reqBody.newPassword }, false);
 };
 
 /**
