@@ -64,7 +64,7 @@ const resetPassword = async (resetPasswordToken, newPassword) => {
     if (!user) {
       throw new Error();
     }
-    await userService.updateUserById(user.id, { password: newPassword });
+    await userService.updateUserById(user.id, { password: newPassword }, false);
     await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
@@ -84,7 +84,7 @@ const verifyEmail = async (verifyEmailToken) => {
       throw new Error();
     }
     await Token.deleteMany({ user: user.id, type: tokenTypes.VERIFY_EMAIL });
-    await userService.updateUserById(user.id, { isEmailVerified: true });
+    await userService.updateUserById(user.id, { isEmailVerified: true }, false);
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Email verification failed');
   }
@@ -110,7 +110,7 @@ const verifyOTPEmail = async (otp, id) => {
         throw new ApiError(httpStatus.NOT_FOUND, 'otp time out, resend to get new one');
       } else {
         await Token.deleteMany({ user: id, type: tokenTypes.VERIFY_EMAIL });
-        await userService.updateUserById(id, { isEmailVerified: true });
+        await userService.updateUserById(id, { isEmailVerified: true }, false);
       }
     } else {
       throw new ApiError(httpStatus.NOT_FOUND, 'Dont found otp');
