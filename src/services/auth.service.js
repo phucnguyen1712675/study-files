@@ -90,10 +90,41 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
+/**
+ * Verify email
+ * @param {string} otp
+ * @param {string} id
+ * @returns {Promise}
+ */
+const verifyOTPEmail = async (otp, id) => {
+  try {
+    const user = await userService.getUserById(id);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
+    }
+    const data = await Token.findOne({ user: id, token: otp });
+    if (data) {
+      const currentTime = new Date().getTime();
+      const diff = data.expires - currentTime;
+      if (diff < 0) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'otp time out, resend to get new one');
+      } else {
+        await Token.deleteMany({ user: id, type: tokenTypes.VERIFY_EMAIL });
+        await userService.updateUserById(id, { isEmailVerified: true });
+      }
+    } else {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Dont found otp');
+    }
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Email verification failed');
+  }
+};
+
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,
   resetPassword,
   verifyEmail,
+  verifyOTPEmail,
 };
