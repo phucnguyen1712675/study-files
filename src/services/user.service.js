@@ -81,6 +81,10 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
+  if (user.email !== updateBody.email) {
+    // eslint-disable-next-line no-param-reassign
+    updateBody = { ...updateBody, isEmailVerified: false };
+  }
   Object.assign(user, updateBody);
   await user.save();
   return user;
