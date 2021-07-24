@@ -11,7 +11,7 @@ const createSubCategory = catchAsync(async (req, res) => {
 
 const getSubCategories = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'categoryId']);
-  const options = pick(req.requry, ['sortBy', 'limit', 'page']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await subCategoryService.querySubCategories(filter, options);
   res.send(result);
 });

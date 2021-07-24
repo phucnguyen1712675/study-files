@@ -100,6 +100,25 @@ const increaseSubscriberNumberByCourseId = async (courseId) => {
   return course;
 };
 
+/**
+ * Get course details by id
+ * @param {ObjectId} id
+ * @returns {Promise<Course>}
+ */
+const getCourseDetailsById = async (id) => {
+  const firstPopulateObj = {
+    path: 'sections',
+    populate: {
+      path: 'lectures',
+      populate: {
+        path: 'video',
+        select: 'publicId',
+      },
+    },
+  };
+  return Course.findById(id).populate(firstPopulateObj);
+};
+
 module.exports = {
   createCourse,
   queryCourses,
@@ -108,4 +127,5 @@ module.exports = {
   deleteCourseById,
   increaseViewByCourseId,
   increaseSubscriberNumberByCourseId,
+  getCourseDetailsById,
 };

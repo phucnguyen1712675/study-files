@@ -6,7 +6,6 @@ const compression = require('compression');
 const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
-const bodyParser = require('body-parser');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -22,18 +21,14 @@ if (config.env !== 'test') {
   app.use(morgan.errorHandler);
 }
 
-// use bodyParser
-app.use(bodyParser.json({ limit: '30mb', extended: true }));
-app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
-
 // set security HTTP headers
 app.use(helmet());
 
 // parse json request body
-app.use(express.json());
+app.use(express.json({ limit: '200mb' }));
 
 // parse urlencoded request body
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: '200mb', extended: true }));
 
 // sanitize request data
 app.use(xss());

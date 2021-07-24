@@ -86,6 +86,6 @@ module.exports = {
   queryCategories,
   getCategoryById,
   getCategoryByName,
-  deleteCategoryById,
   updateCategoryById,
+  deleteCategoryById,
 };

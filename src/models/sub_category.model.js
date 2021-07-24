@@ -23,14 +23,24 @@ const subCategorySchema = mongoose.Schema(
   }
 );
 
+subCategorySchema.virtual('category', {
+  ref: 'Category',
+  localField: 'categoryId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+subCategorySchema.set('toObject', { virtuals: true });
+subCategorySchema.set('toJSON', { virtuals: true });
+
 // add plugin that converts mongoose to json
 subCategorySchema.plugin(toJSON);
 subCategorySchema.plugin(paginate);
 
 /**
  * Check if name is taken
- * @param {string} name - The cate's name
- * @param {ObjectId} [excludeSubCategoryId] - The id of the subcate to be excluded
+ * @param {string} name - The subCategory's name
+ * @param {ObjectId} [excludeSubCategoryId] - The id of the subCategory to be excluded
  * @returns {Promise<boolean>}
  */
 subCategorySchema.statics.isNameTaken = async function (name, excludeSubCategoryId) {
@@ -38,9 +48,9 @@ subCategorySchema.statics.isNameTaken = async function (name, excludeSubCategory
   return !!subCategory;
 };
 
-subCategorySchema.pre('save', async function (next) {
-  next();
-});
+// subCategorySchema.pre('save', async function (next) {
+//   next();
+// });
 
 /**
  * @typedef SubCategory

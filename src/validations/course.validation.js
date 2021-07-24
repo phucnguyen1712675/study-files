@@ -4,17 +4,24 @@ const { objectId } = require('./custom.validation');
 const createCourse = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    subCategoryId: Joi.string().required(),
-    description: Joi.string().required(),
+    subCategoryId: Joi.required().custom(objectId),
+    teacherId: Joi.required().custom(objectId),
+    shortDescription: Joi.string().required(),
+    detailDescription: Joi.string().required(),
     image: Joi.string().required(),
+    status: Joi.boolean(),
     fee: Joi.number(),
+    originalFee: Joi.number(),
+    promotionStart: Joi.date(),
+    promotionEnd: Joi.date(),
   }),
 };
 
 const getCourses = {
   query: Joi.object().keys({
     name: Joi.string(),
-    subCategoryId: Joi.string(),
+    subCategoryId: Joi.custom(objectId),
+    teacherId: Joi.custom(objectId),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -23,7 +30,7 @@ const getCourses = {
 
 const getCourse = {
   params: Joi.object().keys({
-    courseId: Joi.string().custom(objectId),
+    courseId: Joi.custom(objectId),
   }),
 };
 
@@ -34,18 +41,25 @@ const updateCourse = {
   body: Joi.object()
     .keys({
       name: Joi.string(),
-      description: Joi.string(),
+      subCategoryId: Joi.custom(objectId),
+      shortDescription: Joi.string(),
+      detailDescription: Joi.string(),
       image: Joi.string(),
+      status: Joi.boolean(),
       fee: Joi.number(),
-      isCompleted: Joi.boolean(),
+      subscriberNumber: Joi.number(),
       view: Joi.number(),
+      rating: Joi.number(),
+      originalFee: Joi.number(),
+      promotionStart: Joi.date(),
+      promotionEnd: Joi.date(),
     })
     .min(1),
 };
 
 const deleteCourse = {
   params: Joi.object().keys({
-    courseId: Joi.string().custom(objectId),
+    courseId: Joi.custom(objectId),
   }),
 };
 
