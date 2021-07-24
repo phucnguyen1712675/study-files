@@ -1,6 +1,4 @@
-const httpStatus = require('http-status');
 const { Section } = require('../models');
-const ApiError = require('../utils/ApiError');
 
 /**
  * create a section
@@ -8,10 +6,6 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Section>}
  */
 const createSection = async (body) => {
-  if (await Section.isOrdinalNumberTaken(body.ordinalNumber)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Ordinal Number already taken');
-  }
-
   const { courseId } = body;
 
   const sectionCount = await Section.countDocuments({ courseId }).exec();
