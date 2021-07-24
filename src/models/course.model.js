@@ -76,6 +76,9 @@ const courseSchema = mongoose.Schema(
     promotionEnd: {
       type: Date,
     },
+    updated_at: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
