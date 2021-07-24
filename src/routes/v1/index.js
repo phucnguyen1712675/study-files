@@ -10,10 +10,15 @@ const studentMyCourseRoute = require('./student.route/my_course.route');
 const watchListRoute = require('./student.route/my_watch_list.route');
 const ratingRoute = require('./guest.route/rating.route');
 const feedbackRoute = require('./guest.route/feedback.route');
+// Teacher route
+const teacherCourseRoute = require('./teacher/course.route');
+const teacherSectionRoute = require('./teacher/section.route');
+const teacherLectureRoute = require('./teacher/lecture.route');
 // guest route
 const guestCourseRoute = require('./guest.route/course.route');
 const guestCategoryRoute = require('./guest.route/category.route');
 const guestSubCategoryRoute = require('./guest.route/sub_category.route');
+const guestTeacherRoute = require('./guest.route/user.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -70,6 +75,22 @@ const defaultRoutes = [
   {
     path: '/feedbacks',
     route: feedbackRoute,
+  },
+  {
+    path: '/teachers/info',
+    route: guestTeacherRoute,
+  },
+  {
+    path: '/teachers/courses',
+    route: teacherCourseRoute,
+  },
+  {
+    path: '/teachers/sections',
+    route: teacherSectionRoute,
+  },
+  {
+    path: '/teachers/lectures',
+    route: teacherLectureRoute,
   },
 ];
 

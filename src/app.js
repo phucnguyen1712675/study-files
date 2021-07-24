@@ -25,10 +25,10 @@ if (config.env !== 'test') {
 app.use(helmet());
 
 // parse json request body
-app.use(express.json());
+app.use(express.json({ limit: '200mb' }));
 
 // parse urlencoded request body
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: '200mb', extended: true }));
 
 // sanitize request data
 app.use(xss());
@@ -50,8 +50,16 @@ if (config.env === 'production') {
   app.use('/v1/auth', authLimiter);
 }
 
+app.get('/', (req, res) => {
+  res.send('hello from studyfile');
+});
+
 // v1 api routes
 app.use('/v1', routes);
+
+app.get('/', (req, res) => {
+  res.send('hello from studyfile');
+});
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

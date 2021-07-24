@@ -42,8 +42,8 @@ subCategorySchema.plugin(paginate);
 
 /**
  * Check if name is taken
- * @param {string} name - The cate's name
- * @param {ObjectId} [excludeSubCategoryId] - The id of the subcate to be excluded
+ * @param {string} name - The subCategory's name
+ * @param {ObjectId} [excludeSubCategoryId] - The id of the subCategory to be excluded
  * @returns {Promise<boolean>}
  */
 subCategorySchema.statics.isNameTaken = async function (name, excludeSubCategoryId) {

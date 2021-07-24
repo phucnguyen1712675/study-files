@@ -35,9 +35,9 @@ myCoursesSchema.statics.isExists = async function (courseId, studentId, excludeM
   return !!myCourse;
 };
 
-myCoursesSchema.pre('save', async function (next) {
-  next();
-});
+// myCoursesSchema.pre('save', async function (next) {
+//   next();
+// });
 
 /**
  * @typedef MyCourses
