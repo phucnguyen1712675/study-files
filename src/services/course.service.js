@@ -3,7 +3,7 @@ const { Course, SubCategory } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
- * create a course
+ * Create a course
  * @param {Object} courseBody
  * @returns {Promise<Course>}
  */
@@ -88,6 +88,22 @@ const deleteCourse = async (courseId) => {
 };
 
 /**
+ * Update course by id
+ * @param {ObjectId} courseId
+ * @param {Object} updateBody
+ * @returns {Promise<Course>}
+ */
+const updateCourse = async (courseId, updateBody) => {
+  const course = await getCourseById(courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+  }
+  Object.assign(course, updateBody);
+  await course.save();
+  return course;
+};
+
+/**
  * increase view in course by courseId
  * @param {ObjectId} courseId
  * @returns {Promise<Course>}
@@ -120,6 +136,25 @@ const increaseSubscriberNumberByCourseId = async (courseId) => {
 };
 
 /**
+ * Get course details by id
+ * @param {ObjectId} id
+ * @returns {Promise<Course>}
+ */
+const getCourseDetailsById = async (id) => {
+  const firstPopulateObj = {
+    path: 'sections',
+    populate: {
+      path: 'lectures',
+      populate: {
+        path: 'video',
+        select: 'publicId',
+      },
+    },
+  };
+  return Course.findById(id).populate(firstPopulateObj);
+};
+
+/** 
  * update rating and rating count
  *  @param {ObjectId} courseId
  *  @param {Number} score
@@ -144,8 +179,10 @@ module.exports = {
   queryCourses,
   createCourse,
   deleteCourse,
+  updateCourse,
   getCoursesBySubCategoryId,
   increaseViewByCourseId,
   increaseSubscriberNumberByCourseId,
   updateRatingAndRatingCount,
+  getCourseDetailsById,
 };

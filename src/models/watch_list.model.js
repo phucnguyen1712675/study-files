@@ -35,9 +35,9 @@ watchListSchema.statics.isExists = async function (courseId, studentId, excludeW
   return !!watchList;
 };
 
-watchListSchema.pre('save', async function (next) {
-  next();
-});
+// watchListSchema.pre('save', async function (next) {
+//   next();
+// });
 
 /**
  * @typedef WatchList

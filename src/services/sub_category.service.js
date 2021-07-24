@@ -102,14 +102,14 @@ const increaseSubcriberNumberSubCategory = async (subCategoryId) => {
 const increaseSubcriberNumberSubCategoryBycourseId = async (courseId) => {
   const course = await Course.findById(courseId);
   const { subCategoryId } = course;
-  const subCategory = await getSubCategoryById(subCategoryId);
-  if (!subCategory) {
+  const resultSubCategory = await getSubCategoryById(subCategoryId);
+  if (!resultSubCategory) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Sub category not found');
   }
-  const newSubscriberNumber = subCategory.subscriberNumber + 1;
-  Object.assign(subCategory, { subscriberNumber: newSubscriberNumber });
-  await subCategory.save();
-  return subCategory;
+  const newSubscriberNumber = resultSubCategory.subscriberNumber + 1;
+  Object.assign(resultSubCategory, { subscriberNumber: newSubscriberNumber });
+  await resultSubCategory.save();
+  return resultSubCategory;
 };
 
 /**
