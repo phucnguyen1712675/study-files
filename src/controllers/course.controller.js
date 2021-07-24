@@ -30,9 +30,15 @@ const createCourse = catchAsync(async (req, res) => {
 });
 
 const getCourses = catchAsync(async (req, res) => {
+  const { query } = req.query;
   const filter = pick(req.query, ['name', 'subCategoryId', 'teacherId']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await courseService.queryCourses(filter, options);
+  const result = await courseService.queryCourses(query, filter, options);
+  res.send(result);
+});
+
+const getAllCourses = catchAsync(async (req, res) => {
+  const result = await courseService.getAllCourses();
   res.send(result);
 });
 
@@ -46,12 +52,16 @@ const getCourse = catchAsync(async (req, res) => {
 });
 
 const updateCourse = catchAsync(async (req, res) => {
-  const course = await courseService.updateCourseById(req.params.courseId, req.body);
+  const course = await courseService.updateCourse(req.params.courseId, req.body);
   res.send(course);
 });
 
 const deleteCourse = catchAsync(async (req, res) => {
-  await courseService.deleteCourseById(req.params.courseId);
+  const course = await courseService.getCourseById(req.params.courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+  }
+  await courseService.deleteCourse(req.params.courseId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -65,6 +75,7 @@ const getCourseDetails = catchAsync(async (req, res) => {
 
 module.exports = {
   createCourse,
+  getAllCourses,
   getCourses,
   getCourse,
   updateCourse,

@@ -8,11 +8,11 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('manageCategories'), validate(subCategoryValidation.createSubCategory), subCategoryController.createSubCategory) // create sub category
-  .get(auth('manageCategories'), validate(subCategoryValidation.getSubCategories), subCategoryController.getSubCategories); // query sub categories
+  .get(subCategoryController.getSubCategories); // query sub categories
 
 router
   .route('/:subCategoryId')
-  .get(auth('manageCategories'), validate(subCategoryValidation.getSubCategory), subCategoryController.getSubCategory) // get sub category
+  .get(validate(subCategoryValidation.getSubCategory), subCategoryController.getSubCategory) // get sub category
   .patch(
     auth('manageCategories'),
     validate(subCategoryValidation.updateSubCategory),

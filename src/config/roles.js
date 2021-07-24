@@ -1,9 +1,17 @@
-const roles = ['student', 'teacher', 'admin'];
+const roles = ['user', 'admin', 'teacher', 'student'];
 
 const roleRights = new Map();
-roleRights.set(roles[0], ['updateUser', 'getUser', 'manageMyCourses', 'manageWatchList']);
-roleRights.set(roles[1], ['manageCourses', 'updateTeacher', 'getTeacher']);
-roleRights.set(roles[2], ['manageUsers', 'manageTeachers', 'manageCategories', 'getUser', 'getTeacher', 'deleteCourse']);
+roleRights.set(roles[0], []);
+roleRights.set(roles[1], ['getUsers', 'manageUsers', 'manageCourses', 'manageCategories']);
+roleRights.set(roles[2], ['manageUsers', 'manageCourses', 'getCourse', 'manageFeedbacks']);
+roleRights.set(roles[3], [
+  'manageUsers',
+  'manageMyCourses',
+  'getCourse',
+  'manageCourse',
+  'manageWatchList',
+  'manageRatings',
+]);
 
 module.exports = {
   roles,

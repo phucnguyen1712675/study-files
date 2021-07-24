@@ -7,6 +7,7 @@ const subCategorySchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      index: true,
     },
     subscriberNumber: {
       type: Number,
@@ -14,14 +15,16 @@ const subCategorySchema = mongoose.Schema(
     },
     categoryId: {
       type: String,
-      required: true,
       trim: true,
+      required: true,
     },
   },
   {
     timestamps: true,
   }
 );
+
+subCategorySchema.index({ name: 'text' });
 
 subCategorySchema.virtual('category', {
   ref: 'Category',

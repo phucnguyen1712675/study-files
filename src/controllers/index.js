@@ -6,3 +6,4 @@ module.exports.subCategoryController = require('./sub_category.controller');
 module.exports.userController = require('./user.controller');
 module.exports.sectionController = require('./section.controller');
 module.exports.lectureController = require('./lecture.controller');
+module.exports.feedbackController = require('./feedback.controller');

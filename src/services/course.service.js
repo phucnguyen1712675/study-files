@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Course } = require('../models');
+const { Course, SubCategory } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -16,6 +16,17 @@ const createCourse = async (courseBody) => {
 };
 
 /**
+ * Get all courses in system
+ * @returns {Promise<QueryResult>}
+ */
+const getAllCourses = async () => {
+  const courses = await Course.find()
+    .populate({ path: 'subCategory', select: 'name' })
+    .populate({ path: 'teacher', select: 'name' });
+  return courses;
+};
+
+/**
  * Query for courses
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
@@ -24,7 +35,19 @@ const createCourse = async (courseBody) => {
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryCourses = async (filter, options) => {
+const queryCourses = async (query, filter, options) => {
+  // eslint-disable-next-line no-param-reassign
+  options.populate = 'teacher, subCategory';
+  if (query) {
+    const subCategories = await SubCategory.find({ $text: { $search: `"${query}"` } });
+    let orArray = [{ $text: { $search: `"${query}"` } }];
+    subCategories.forEach((subCategory) => {
+      orArray = [...orArray, { subCategoryId: subCategory.id }];
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    filter.$or = [...orArray];
+  }
   const courses = await Course.paginate(filter, options);
   return courses;
 };
@@ -35,7 +58,33 @@ const queryCourses = async (filter, options) => {
  * @returns {Promise<Course>}
  */
 const getCourseById = async (id) => {
-  return Course.findById(id);
+  return Course.findById(id)
+    .populate({ path: 'subCategory', select: 'name categoryId' })
+    .populate({ path: 'teacher', select: 'name' });
+};
+
+/**
+ * get course by subCategoryId
+ * @param {ObjectId} subCategoryId
+ * @returns {Promise<QueryResult>}
+ */
+const getCoursesBySubCategoryId = async (subCategoryId) => {
+  const courses = Course.find({ subCategoryId });
+  return courses;
+};
+
+/**
+ * Delete course by id
+ * @param {ObjectId} courseId
+ * @returns {Promise<Course>}
+ */
+const deleteCourse = async (courseId) => {
+  const course = await getCourseById(courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+  }
+  await course.remove();
+  return course;
 };
 
 /**
@@ -44,7 +93,7 @@ const getCourseById = async (id) => {
  * @param {Object} updateBody
  * @returns {Promise<Course>}
  */
-const updateCourseById = async (courseId, updateBody) => {
+const updateCourse = async (courseId, updateBody) => {
   const course = await getCourseById(courseId);
   if (!course) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
@@ -67,20 +116,6 @@ const increaseViewByCourseId = async (courseId) => {
   const newView = course.view + 1;
   Object.assign(course, { view: newView });
   await course.save();
-  return course;
-};
-
-/**
- * Delete course by id
- * @param {ObjectId} courseId
- * @returns {Promise<Course>}
- */
-const deleteCourseById = async (courseId) => {
-  const course = await getCourseById(courseId);
-  if (!course) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
-  }
-  await course.remove();
   return course;
 };
 
@@ -119,13 +154,35 @@ const getCourseDetailsById = async (id) => {
   return Course.findById(id).populate(firstPopulateObj);
 };
 
+/** 
+ * update rating and rating count
+ *  @param {ObjectId} courseId
+ *  @param {Number} score
+ *  @returns {Promise<Course>}
+ */
+const updateRatingAndRatingCount = async (courseId, score) => {
+  const course = await getCourseById(courseId);
+  if (!course) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'course not found');
+  }
+  let newRating = (course.rating * course.ratingCount + score) / (course.ratingCount + 1);
+  newRating = Math.round((newRating + Number.EPSILON) * 10) / 10;
+  const newRatingCount = course.ratingCount + 1;
+  Object.assign(course, { rating: newRating, ratingCount: newRatingCount });
+  await course.save();
+  return course;
+};
+
 module.exports = {
-  createCourse,
-  queryCourses,
   getCourseById,
-  updateCourseById,
-  deleteCourseById,
+  getAllCourses,
+  queryCourses,
+  createCourse,
+  deleteCourse,
+  updateCourse,
+  getCoursesBySubCategoryId,
   increaseViewByCourseId,
   increaseSubscriberNumberByCourseId,
+  updateRatingAndRatingCount,
   getCourseDetailsById,
 };

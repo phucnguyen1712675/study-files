@@ -82,6 +82,8 @@ const courseSchema = mongoose.Schema(
   }
 );
 
+courseSchema.index({ name: 'text' });
+
 courseSchema.virtual('subCategory', {
   ref: 'subCategories',
   localField: 'subCategoryId',
@@ -130,6 +132,11 @@ courseSchema.statics.isOwnedByTeacher = async function (teacherId, excludeCourse
   const course = await this.findOne({ teacherId, _id: { $ne: excludeCourseId } });
   return !!course;
 };
+
+courseSchema.pre('save', async function (next) {
+  this.updated_at = Date.now();
+  next();
+});
 
 /**
  * @typedef Course

@@ -19,9 +19,11 @@ const createCourse = {
 
 const getCourses = {
   query: Joi.object().keys({
+    query: Joi.string(),
     name: Joi.string(),
     subCategoryId: Joi.custom(objectId),
     teacherId: Joi.custom(objectId),
+    createdAt: Joi.date(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),

@@ -112,6 +112,22 @@ const generateVerifyEmailToken = async (user) => {
   return verifyEmailToken;
 };
 
+/**
+ * Generate verify email token
+ * @param {String} email
+ * @returns {Promise<string>}
+ */
+const generateOTPEmailToken = async (email, id) => {
+  const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
+  const digits = '0123456789';
+  let verifyEmailToken = '';
+  for (let i = 0; i < 6; i += 1) {
+    verifyEmailToken += digits[Math.floor(Math.random() * 10)];
+  }
+  await saveToken(verifyEmailToken, id, expires, tokenTypes.VERIFY_EMAIL);
+  return verifyEmailToken;
+};
+
 module.exports = {
   generateToken,
   saveToken,
@@ -119,4 +135,5 @@ module.exports = {
   generateAuthTokens,
   generateResetPasswordToken,
   generateVerifyEmailToken,
+  generateOTPEmailToken,
 };

@@ -1,12 +1,15 @@
 const express = require('express');
 const validate = require('../../../middlewares/validate');
-const { categoryValidation } = require('../../../validations');
-const { categoryController } = require('../../../controllers');
+const {categoryController, subCategoryController} = require('../../../controllers');
+const {subCategoryValidation} = require('../../../validations');
 
 const router = express.Router();
 
-router.route('/').get(validate(categoryValidation.getCategories), categoryController.getCategories);
+// category
+router.route('/').get(categoryController.getCategories);
 
-router.route('/:categoryId').get(validate(categoryValidation.getCategory), categoryController.getCategory);
+router
+  .route('/:categoryId/subCategories')
+  .get(validate(subCategoryValidation.getSubCategoriesByCategoryId), subCategoryController.getSubCategoriesByCategoryId); // get subcategory by categoryId
 
 module.exports = router;

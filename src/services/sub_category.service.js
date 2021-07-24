@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 const httpStatus = require('http-status');
-const { SubCategory, Course } = require('../models');
+const { SubCategory, Course, Category } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -12,20 +13,16 @@ const createSubCategory = async (subCategoryBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, ' Name already taken');
   }
   const subCategory = await SubCategory.create(subCategoryBody);
-  return subCategory;
+  const result = await SubCategory.findById(subCategory.id).populate({ path: 'category', select: 'name' });
+  return result;
 };
 
 /**
  * query for sub categories
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const querySubCategories = async (filter, options) => {
-  const subCategories = await SubCategory.paginate(filter, options);
+const querySubCategories = async () => {
+  const subCategories = await SubCategory.find().populate({ path: 'category', select: 'name' });
   return subCategories;
 };
 
@@ -35,7 +32,8 @@ const querySubCategories = async (filter, options) => {
  * @returns {Promise<SubCategory>}
  */
 const getSubCategoryById = async (id) => {
-  return SubCategory.findById(id);
+  // return SubCategory.findById(id);
+  return SubCategory.findById(id).populate({ path: 'category', select: 'name' });
 };
 
 /**
@@ -71,9 +69,13 @@ const updateSubCategoryById = async (subCategoryId, updateBody) => {
   if (updateBody.name && (await SubCategory.isNameTaken(updateBody.name, subCategoryId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Name already taken');
   }
+  if (updateBody.categoryId && !(await Category.findById(updateBody.categoryId))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot find categoryId');
+  }
   Object.assign(subCategory, updateBody);
   await subCategory.save();
-  return subCategory;
+  const result = await SubCategory.findById(subCategory.id).populate({ path: 'category', select: 'name' });
+  return result;
 };
 
 /**
@@ -116,7 +118,6 @@ const increaseSubcriberNumberSubCategoryBycourseId = async (courseId) => {
  * @returns {Promise<SubCategory>}
  */
 const deleteSubCategoryById = async (subCategoryId) => {
-  // TODO : trang //check if have course in this
   const subCategory = await getSubCategoryById(subCategoryId);
   if (!subCategory) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Sub category not found');

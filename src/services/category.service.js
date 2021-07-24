@@ -17,15 +17,10 @@ const createCategory = async (categoryBody) => {
 
 /**
  * Query for categories
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryCategories = async (filter, options) => {
-  const categories = await Category.paginate(filter, options);
+const queryCategories = async () => {
+  const categories = await Category.find();
   return categories;
 };
 
@@ -72,7 +67,6 @@ const updateCategoryById = async (categoryId, updateBody) => {
  * @returns {Promise<Category>}
  */
 const deleteCategoryById = async (categoryId) => {
-  // TODO : trang // check if have course in this category > sub_category
   const category = await getCategoryById(categoryId);
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');

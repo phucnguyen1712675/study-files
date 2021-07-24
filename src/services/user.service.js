@@ -15,19 +15,39 @@ const createUser = async (userBody) => {
   return user;
 };
 
+// /**
+//  * Query for users
+//  * @param {Object} filter - Mongo filter
+//  * @param {Object} options - Query options
+//  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+//  * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+//  * @param {number} [options.page] - Current page (default = 1)
+//  * @returns {Promise<QueryResult>}
+//  */
+// const queryUsers = async (filter, options) => {
+//   const users = await User.paginate(filter, options);
+//   return users;
+// };
+
 /**
  * Query for users
  * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
+const queryUsers = async (filter) => {
+  const users = await User.find(filter);
   return users;
 };
+
+// /**
+//  * get all user with role
+//  * @param {Object} filter - Mongo filter
+//  * @returns  {Promise<QueryResult>}
+//  */
+// const getAllUser = async (filter) => {
+//   const users = await User.find(filter);
+//   return users;
+// };
 
 /**
  * Get user by id
@@ -53,7 +73,7 @@ const getUserByEmail = async (email) => {
  * @param {Object} updateBody
  * @returns {Promise<User>}
  */
-const updateUserById = async (userId, updateBody) => {
+const updateUserById = async (userId, updateBody, isUpdateUserInfo) => {
   const user = await getUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
@@ -61,6 +81,13 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
+  if (updateBody.email && isUpdateUserInfo) {
+    if (user.email !== updateBody.email) {
+      // eslint-disable-next-line no-param-reassign
+      updateBody = { ...updateBody, isEmailVerified: false };
+    }
+  }
+
   Object.assign(user, updateBody);
   await user.save();
   return user;
@@ -80,7 +107,7 @@ const updateUserPassword = async (userId, reqBody) => {
   if (!(await user.isPasswordMatch(reqBody.oldPassword))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Password not match');
   }
-  await updateUserById(userId, { password: reqBody.newPassword });
+  await updateUserById(userId, { password: reqBody.newPassword }, false);
 };
 
 /**
@@ -100,6 +127,7 @@ const deleteUserById = async (userId) => {
 module.exports = {
   createUser,
   queryUsers,
+  // getAllUser,
   getUserById,
   getUserByEmail,
   updateUserById,

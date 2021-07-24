@@ -5,3 +5,5 @@ module.exports.categoryValidation = require('./category.validation');
 module.exports.subCategoryValidation = require('./sub_category.validation');
 module.exports.sectionValidation = require('./section.validation');
 module.exports.lectureValidation = require('./lecture.validation');
+module.exports.watchListValidation = require('./watch_list.validation');
+module.exports.ratingValidation = require('./rating.validation');
