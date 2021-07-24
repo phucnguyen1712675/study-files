@@ -11,9 +11,9 @@ const watchListRoute = require('./student.route/my_watch_list.route');
 const ratingRoute = require('./guest.route/rating.route');
 const feedbackRoute = require('./guest.route/feedback.route');
 // Teacher route
-const teacherCourseRoute = require('./teacher/course.route');
-const teacherSectionRoute = require('./teacher/section.route');
-const teacherLectureRoute = require('./teacher/lecture.route');
+const teacherCourseRoute = require('./teacher.route/course.route');
+const teacherSectionRoute = require('./teacher.route/section.route');
+const teacherLectureRoute = require('./teacher.route/lecture.route');
 // guest route
 const guestCourseRoute = require('./guest.route/course.route');
 const guestCategoryRoute = require('./guest.route/category.route');
