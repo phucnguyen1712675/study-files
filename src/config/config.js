@@ -8,8 +8,8 @@ const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
     PORT: Joi.number().default(3000),
-    MONGODB_URL: Joi.string().required().description('Mongo DB url'),
-    JWT_SECRET: Joi.string().required().description('JWT secret key'),
+    MONGODB_URL: Joi.string().description('Mongo DB url'),
+    JWT_SECRET: Joi.string().description('JWT secret key'),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(30).description('minutes after which access tokens expire'),
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30).description('days after which refresh tokens expire'),
     JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.number()
@@ -36,7 +36,9 @@ module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   mongoose: {
-    url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
+    url: `mongodb+srv://phucadmin:mimi1234@study-files-cluster.eu58v.mongodb.net/study-files?retryWrites=true&w=majority${
+      envVars.NODE_ENV === 'test' ? '-test' : ''
+    }`,
     options: {
       useCreateIndex: true,
       useNewUrlParser: true,
@@ -44,7 +46,7 @@ module.exports = {
     },
   },
   jwt: {
-    secret: envVars.JWT_SECRET,
+    secret: `thisisasamplesecret`,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
     resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
@@ -52,13 +54,13 @@ module.exports = {
   },
   email: {
     smtp: {
-      host: envVars.SMTP_HOST,
-      port: envVars.SMTP_PORT,
+      host: `smtp.gmail.com`,
+      port: 465,
       auth: {
-        user: envVars.SMTP_USERNAME,
-        pass: envVars.SMTP_PASSWORD,
+        user: `studyFilesWNC@gmail.com`,
+        pass: `studyFilesWNC2021`,
       },
     },
-    from: envVars.EMAIL_FROM,
+    from: `studyFilesWNC@gmail.com`,
   },
 };
