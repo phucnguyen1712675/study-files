@@ -9,3 +9,5 @@ module.exports.Section = require('./section.model');
 module.exports.Lecture = require('./lecture.model');
 module.exports.Ratings = require('./rating.model');
 module.exports.Feedbacks = require('./feedback.model');
+module.exports.History = require('./history.model');
+module.exports.lastLectureWatched = require('./lastLectureWatched.model');

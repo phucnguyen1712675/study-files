@@ -1,7 +1,7 @@
 const express = require('express');
 const validate = require('../../../middlewares/validate');
-const { courseValidation } = require('../../../validations');
-const { courseController } = require('../../../controllers');
+const { courseValidation, sectionValidation } = require('../../../validations');
+const { courseController, sectionController } = require('../../../controllers');
 
 const router = express.Router();
 
@@ -10,5 +10,7 @@ router.route('/').get(validate(courseValidation.getCourses), courseController.ge
 router.route('/:courseId').get(validate(courseValidation.getCourse), courseController.getCourse);
 
 router.route('/:courseId/details').get(validate(courseValidation.getCourse), courseController.getCourseDetails);
+
+router.route('/:courseId/sections').get(validate(sectionValidation.getSections), sectionController.getSectionsDetails);
 
 module.exports = router;

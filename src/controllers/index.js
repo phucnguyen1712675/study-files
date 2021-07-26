@@ -7,3 +7,5 @@ module.exports.userController = require('./user.controller');
 module.exports.sectionController = require('./section.controller');
 module.exports.lectureController = require('./lecture.controller');
 module.exports.feedbackController = require('./feedback.controller');
+module.exports.historyController = require('./history.controller');
+module.exports.lastLectureWatchedController = require('./lastLectureWatched.controller');

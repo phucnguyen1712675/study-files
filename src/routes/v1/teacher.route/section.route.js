@@ -11,6 +11,8 @@ router
   .post(auth('manageCourses'), validate(sectionValidation.createSection), sectionController.createSection)
   .get(auth('manageCourses'), validate(sectionValidation.getSections), sectionController.getSections);
 
-router.route('/details').get(auth('manageCourses'), validate(sectionValidation.getSections), sectionController.getSectionsDetails);
+router
+  .route('/details')
+  .get(auth('manageCourses'), validate(sectionValidation.getSections), sectionController.getSectionsDetails);
 
 module.exports = router;

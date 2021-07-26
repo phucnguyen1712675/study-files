@@ -1,6 +1,4 @@
-const httpStatus = require('http-status');
 const { Lecture } = require('../models');
-const ApiError = require('../utils/ApiError');
 
 /**
  * create a lecture
@@ -8,10 +6,6 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Lecture>}
  */
 const createLecture = async (body) => {
-  if (await Lecture.isOrdinalNumberTaken(body.ordinalNumber)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Ordinal Number already taken');
-  }
-
   const { sectionId } = body;
 
   const lectureCount = await Lecture.countDocuments({ sectionId }).exec();
