@@ -147,7 +147,7 @@ const getCourseDetailsById = async (id) => {
       path: 'lectures',
       populate: {
         path: 'video',
-        select: 'publicId',
+        select: 'videoUrl',
       },
     },
   };

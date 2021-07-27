@@ -16,13 +16,13 @@ const createCourse = catchAsync(async (req, res) => {
 
   const { image } = req.body;
 
-  const { public_id } = await cloudinary.uploader.upload(image, {
+  const { url } = await cloudinary.uploader.upload(image, {
     upload_preset: COURSE_IMAGE_UPLOAD_PRESET,
   });
 
   const newCourse = {
     ...req.body,
-    image: public_id,
+    image: url,
   };
 
   const course = await courseService.createCourse(newCourse);
