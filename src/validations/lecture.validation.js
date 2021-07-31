@@ -5,8 +5,8 @@ const createLecture = {
   body: Joi.object().keys({
     sectionId: Joi.custom(objectId).required(),
     title: Joi.string().min(10).max(70).required(),
-    canPreview: Joi.boolean().required(),
-    video: Joi.string().required(),
+    canPreview: Joi.boolean(),
+    video: Joi.string(),
   }),
 };
 
