@@ -47,6 +47,7 @@ const courseSchema = mongoose.Schema(
       type: Number,
       default: 0,
       min: 0,
+      max: 500,
     },
     subscriberNumber: {
       type: Number,
@@ -74,6 +75,9 @@ const courseSchema = mongoose.Schema(
       type: Date,
     },
     promotionEnd: {
+      type: Date, 
+    },
+    updated_at: {
       type: Date,
     },
     updated_at: {

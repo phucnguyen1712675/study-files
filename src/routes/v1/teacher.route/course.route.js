@@ -7,5 +7,6 @@ const { courseController } = require('../../../controllers');
 const router = express.Router();
 
 router.route('/').post(auth('manageCourses'), validate(courseValidation.createCourse), courseController.createCourse);
+router.route('/:courseId').patch(auth('manageCourses'), validate(courseValidation.updateCourse), courseController.updateCourse);
 
 module.exports = router;

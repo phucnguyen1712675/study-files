@@ -35,10 +35,16 @@ const deleteCategory = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getCategoriesDetails = catchAsync(async (req, res) => {
+  const result = await categoryService.getCategoriesDetails();
+  res.send(result);
+});
+
 module.exports = {
   createCategory,
   getCategories,
   getCategory,
   updateCategory,
   deleteCategory,
+  getCategoriesDetails,
 };

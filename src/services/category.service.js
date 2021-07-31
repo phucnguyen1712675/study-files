@@ -75,6 +75,18 @@ const deleteCategoryById = async (categoryId) => {
   return category;
 };
 
+/**
+ * Get categories details
+ * @param {ObjectId} id
+ * @returns {Promise<Course>}
+ */
+const getCategoriesDetails = () => {
+  const populateObj = {
+    path: 'subCategories',
+  };
+  return Category.find().populate(populateObj);
+};
+
 module.exports = {
   createCategory,
   queryCategories,
@@ -82,4 +94,5 @@ module.exports = {
   getCategoryByName,
   updateCategoryById,
   deleteCategoryById,
+  getCategoriesDetails,
 };

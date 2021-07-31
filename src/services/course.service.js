@@ -140,21 +140,21 @@ const increaseSubscriberNumberByCourseId = async (courseId) => {
  * @param {ObjectId} id
  * @returns {Promise<Course>}
  */
-const getCourseDetailsById = async (id) => {
-  const firstPopulateObj = {
+const getCourseDetailsById = (id) => {
+  const populateObj = {
     path: 'sections',
     populate: {
       path: 'lectures',
       populate: {
         path: 'video',
-        select: 'publicId',
+        select: 'videoUrl',
       },
     },
   };
-  return Course.findById(id).populate(firstPopulateObj);
+  return Course.findById(id).populate(populateObj);
 };
 
-/** 
+/**
  * update rating and rating count
  *  @param {ObjectId} courseId
  *  @param {Number} score

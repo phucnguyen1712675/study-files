@@ -14,18 +14,26 @@ const createLecture = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Section not found');
   }
 
-  const { video } = req.body;
+  var newLecture;
 
-  const { url } = await cloudinary.uploader.upload_large(video, {
-    resource_type: 'video',
-    upload_preset: COURSE_VIDEOS_UPLOAD_PRESET,
-  });
+  if (!req.body.video) {
+    newLecture = {
+      ...req.body,
+      canPreview: false,
+    };
+  } else {
+    const { video } = req.body;
 
-  const newLecture = {
-    ...req.body,
-    videoUrl: url,
-  };
+    const { url } = await cloudinary.uploader.upload_large(video, {
+      resource_type: 'video',
+      upload_preset: COURSE_VIDEOS_UPLOAD_PRESET,
+    });
 
+    newLecture = {
+      ...req.body,
+      videoUrl: url,
+    };
+  }
   const lecture = await lectureService.createLecture(newLecture);
   res.status(httpStatus.CREATED).send(lecture);
 });
