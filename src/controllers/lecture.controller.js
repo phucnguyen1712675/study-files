@@ -45,7 +45,19 @@ const getLectures = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const testCreateLecture = catchAsync(async (req, res) => {
+  const { sectionId } = req.body;
+
+  const section = await sectionService.getSectionById(sectionId);
+  if (!section) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Section not found');
+  }
+  const lecture = await lectureService.createLecture(req.body);
+  res.status(httpStatus.CREATED).send(lecture);
+});
+
 module.exports = {
   createLecture,
   getLectures,
+  testCreateLecture,
 };

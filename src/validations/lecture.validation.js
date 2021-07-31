@@ -20,7 +20,17 @@ const getLectures = {
   }),
 };
 
+const testCreateLecture = {
+  body: Joi.object().keys({
+    sectionId: Joi.custom(objectId).required(),
+    title: Joi.string().min(10).max(70).required(),
+    canPreview: Joi.boolean().required(),
+    videoUrl: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createLecture,
   getLectures,
+  testCreateLecture,
 };

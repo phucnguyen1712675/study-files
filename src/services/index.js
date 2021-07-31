@@ -11,3 +11,5 @@ module.exports.lectureService = require('./lecture.service');
 module.exports.watchListService = require('./watch_list.service');
 module.exports.ratingService = require('./rating.service');
 module.exports.feedbackService = require('./feedback.service');
+module.exports.historyService = require('./history.service');
+module.exports.lastLectureWatchedService = require('./lastLectureWatched.service');

@@ -19,6 +19,9 @@ const guestCourseRoute = require('./guest.route/course.route');
 const guestCategoryRoute = require('./guest.route/category.route');
 const guestSubCategoryRoute = require('./guest.route/sub_category.route');
 const guestTeacherRoute = require('./guest.route/user.route');
+// tester route
+const testRoute = require('./test.route/test.route');
+
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -92,6 +95,7 @@ const defaultRoutes = [
     path: '/teachers/lectures',
     route: teacherLectureRoute,
   },
+  { path: '/test', route: testRoute },
 ];
 
 const devRoutes = [

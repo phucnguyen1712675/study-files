@@ -7,3 +7,6 @@ module.exports.sectionValidation = require('./section.validation');
 module.exports.lectureValidation = require('./lecture.validation');
 module.exports.watchListValidation = require('./watch_list.validation');
 module.exports.ratingValidation = require('./rating.validation');
+module.exports.myCourseValidation = require('./my_courses.validation');
+module.exports.historyValidation = require('./history.validation');
+module.exports.lastLectureWatchedValidation = require('./lastLectureWatched.validation');

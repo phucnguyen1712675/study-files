@@ -11,6 +11,7 @@ roleRights.set(roles[3], [
   'manageCourse',
   'manageWatchList',
   'manageRatings',
+  'manageHistories',
 ]);
 
 module.exports = {

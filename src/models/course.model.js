@@ -80,6 +80,9 @@ const courseSchema = mongoose.Schema(
     updated_at: {
       type: Date,
     },
+    updated_at: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
