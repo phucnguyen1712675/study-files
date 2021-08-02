@@ -35,11 +35,9 @@ const updateUser = catchAsync(async (req, res) => {
   const { avatar } = req.body;
   let newBody = { ...req.body };
   if (avatar) {
-    console.log(avatar);
     const { url } = await cloudinary.uploader.upload(avatar, {
       upload_preset: TEACHER_AVATAR_UPLOAD_PRESET,
     });
-    console.log(url);
     newBody = { ...req.body, avatar: url };
   }
   const user = await userService.updateUserById(userId, newBody, true);
