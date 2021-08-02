@@ -59,11 +59,15 @@ const courseSchema = mongoose.Schema(
       default: 0,
       min: 0,
     },
-    raring: {
+    rating: {
       type: Number,
       default: 0,
       min: 0,
       max: 5,
+    },
+    ratingCount: {
+      type: Number,
+      default: 0,
     },
     originalFee: {
       type: Number,
@@ -76,9 +80,6 @@ const courseSchema = mongoose.Schema(
     },
     promotionEnd: {
       type: Date, 
-    },
-    updated_at: {
-      type: Date,
     },
     updated_at: {
       type: Date,
