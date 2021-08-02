@@ -52,7 +52,21 @@ const getCourse = catchAsync(async (req, res) => {
 });
 
 const updateCourse = catchAsync(async (req, res) => {
-  const course = await courseService.updateCourse(req.params.courseId, req.body);
+  const { image } = req.body;
+  let newCourse = { ...req.body };
+
+  if (image) {
+    const { url } = await cloudinary.uploader.upload(image, {
+      upload_preset: COURSE_IMAGE_UPLOAD_PRESET,
+    });
+
+    newCourse = {
+      ...req.body,
+      image: url,
+    };
+  }
+
+  const course = await courseService.updateCourse(req.params.courseId, newCourse);
   res.send(course);
 });
 
