@@ -1,7 +1,9 @@
 const COURSE_IMAGE_UPLOAD_PRESET = 'course_images';
 const COURSE_VIDEOS_UPLOAD_PRESET = 'course_videos';
+const TEACHER_AVATAR_UPLOAD_PRESET = 'teacher_avatars';
 
 module.exports = {
   COURSE_IMAGE_UPLOAD_PRESET,
   COURSE_VIDEOS_UPLOAD_PRESET,
+  TEACHER_AVATAR_UPLOAD_PRESET,
 };
