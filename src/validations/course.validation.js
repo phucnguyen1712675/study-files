@@ -1,17 +1,26 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
+const { courseConstant } = require('../constants');
 
 const createCourse = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     subCategoryId: Joi.required().custom(objectId),
     teacherId: Joi.required().custom(objectId),
-    shortDescription: Joi.string().min(100).max(300).required(),
-    detailDescription: Joi.string().min(1000).max(2000).required(),
+    shortDescription: Joi.string()
+      .min(courseConstant.COURSE_SHORT_DESCRIPTION_MIN_LENGTH)
+      .max(courseConstant.COURSE_SHORT_DESCRIPTION_MAX_LENGTH)
+      .required(),
+    detailDescription: Joi.string()
+      .min(courseConstant.COURSE_DETAIL_DESCRIPTION_MIN_LENGTH)
+      .max(courseConstant.COURSE_DETAIL_DESCRIPTION_MAX_LENGTH)
+      .required(),
     image: Joi.string().required(),
     status: Joi.boolean(),
-    fee: Joi.number().min(0).max(500),
-    originalFee: Joi.number().min(0).max(500),
+    originalFee: Joi.number()
+      .min(courseConstant.COURSE_ORIGINAL_FEE_MIN_VALUE)
+      .max(courseConstant.COURSE_ORIGINAL_FEE_MAX_VALUE),
+    fee: Joi.number().min(courseConstant.COURSE_FEE_MIN_VALUE).max(courseConstant.COURSE_FEE_MAX_VALUE),
     promotionStart: Joi.date(),
     promotionEnd: Joi.date(),
   }),
@@ -44,15 +53,21 @@ const updateCourse = {
     .keys({
       name: Joi.string(),
       subCategoryId: Joi.custom(objectId),
-      shortDescription: Joi.string().min(100).max(300),
-      detailDescription: Joi.string().min(1000).max(2000),
+      shortDescription: Joi.string()
+        .min(courseConstant.COURSE_SHORT_DESCRIPTION_MIN_LENGTH)
+        .max(courseConstant.COURSE_SHORT_DESCRIPTION_MAX_LENGTH),
+      detailDescription: Joi.string()
+        .min(courseConstant.COURSE_DETAIL_DESCRIPTION_MIN_LENGTH)
+        .max(courseConstant.COURSE_DETAIL_DESCRIPTION_MAX_LENGTH),
       image: Joi.string(),
       status: Joi.boolean(),
-      fee: Joi.number().min(0).max(500),
+      fee: Joi.number().min(courseConstant.COURSE_FEE_MIN_VALUE).max(courseConstant.COURSE_FEE_MAX_VALUE),
       subscriberNumber: Joi.number(),
       view: Joi.number(),
-      rating: Joi.number().min(0).max(5),
-      originalFee: Joi.number().min(0).max(500),
+      rating: Joi.number().min(courseConstant.COURSE_RATING_MIN_VALUE).max(courseConstant.COURSE_RATING_MAX_VALUE),
+      originalFee: Joi.number()
+        .min(courseConstant.COURSE_ORIGINAL_FEE_MIN_VALUE)
+        .max(courseConstant.COURSE_ORIGINAL_FEE_MAX_VALUE),
       promotionStart: Joi.date(),
       promotionEnd: Joi.date(),
     })

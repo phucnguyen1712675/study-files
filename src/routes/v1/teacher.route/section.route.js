@@ -12,7 +12,19 @@ router
   .get(auth('manageCourses'), validate(sectionValidation.getSections), sectionController.getSections);
 
 router
+  .route('/swap-ordinal-number')
+  .patch(
+    auth('manageCourses'),
+    validate(sectionValidation.swapSectionOrdinalNumber),
+    sectionController.swapSectionOrdinalNumber
+  );
+
+router
   .route('/details')
   .get(auth('manageCourses'), validate(sectionValidation.getSections), sectionController.getSectionsDetails);
+
+router
+  .route('/:sectionId')
+  .patch(auth('manageCourses'), validate(sectionValidation.updateSection), sectionController.updateSection);
 
 module.exports = router;

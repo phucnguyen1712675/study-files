@@ -1,4 +1,6 @@
+const httpStatus = require('http-status');
 const { Section } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * create a section
@@ -42,8 +44,25 @@ const getSectionById = async (id) => {
   return Section.findById(id);
 };
 
+/**
+ * Update section by id
+ * @param {ObjectId} sectionId
+ * @param {Object} updateBody
+ * @returns {Promise<Section>}
+ */
+ const updateSectionById = async (sectionId, updateBody) => {
+  const section = await getSectionById(sectionId);
+  if (!section) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Section not found');
+  }
+  Object.assign(section, updateBody);
+  await section.save();
+  return section;
+};
+
 module.exports = {
   createSection,
   querySections,
   getSectionById,
+  updateSectionById,
 };

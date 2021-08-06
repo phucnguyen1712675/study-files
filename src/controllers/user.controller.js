@@ -28,19 +28,21 @@ const getUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const userId = req.params.userId;
-  if (!userService.getUserById(userId)) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
-  }
-  const { avatar } = req.body;
-  let newBody = { ...req.body };
-  if (avatar) {
+  var newBody;
+
+  if (!req.body.avatar) {
+    newBody = { ...req.body };
+  } else {
+    const { avatar } = req.body;
+
     const { url } = await cloudinary.uploader.upload(avatar, {
       upload_preset: TEACHER_AVATAR_UPLOAD_PRESET,
     });
+
     newBody = { ...req.body, avatar: url };
   }
-  const user = await userService.updateUserById(userId, newBody, true);
+
+  const user = await userService.updateUserById(req.params.userId, newBody, true);
   res.send(user);
 });
 

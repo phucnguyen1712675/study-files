@@ -1,4 +1,6 @@
+const httpStatus = require('http-status');
 const { Lecture } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * create a lecture
@@ -34,7 +36,34 @@ const queryLectures = async (filter, options) => {
   return lectures;
 };
 
+/**
+ * Get lecture by id
+ * @param {ObjectId} id
+ * @returns {Promise<Lecture>}
+ */
+const getLectureById = async (id) => {
+  return Lecture.findById(id);
+};
+
+/**
+ * Update lecture by id
+ * @param {ObjectId} lectureId
+ * @param {Object} updateBody
+ * @returns {Promise<Lecture>}
+ */
+const updateLectureById = async (lectureId, updateBody) => {
+  const lecture = await getLectureById(lectureId);
+  if (!lecture) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Lecture not found');
+  }
+  Object.assign(lecture, updateBody);
+  await lecture.save();
+  return lecture;
+};
+
 module.exports = {
   createLecture,
   queryLectures,
+  getLectureById,
+  updateLectureById,
 };
