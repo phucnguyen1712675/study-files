@@ -52,21 +52,24 @@ const getCourse = catchAsync(async (req, res) => {
 });
 
 const updateCourse = catchAsync(async (req, res) => {
-  const { image } = req.body;
-  let newCourse = { ...req.body };
+  var newBody;
 
-  if (image) {
+  if (!req.body.image) {
+    newBody = { ...req.body };
+  } else {
+    const { image } = req.body;
+
     const { url } = await cloudinary.uploader.upload(image, {
       upload_preset: COURSE_IMAGE_UPLOAD_PRESET,
     });
 
-    newCourse = {
+    newBody = {
       ...req.body,
       image: url,
     };
   }
 
-  const course = await courseService.updateCourse(req.params.courseId, newCourse);
+  const course = await courseService.updateCourseById(req.params.courseId, newBody);
   res.send(course);
 });
 
@@ -75,7 +78,7 @@ const deleteCourse = catchAsync(async (req, res) => {
   if (!course) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
   }
-  await courseService.deleteCourse(req.params.courseId);
+  await courseService.deleteCourseById(req.params.courseId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

@@ -78,7 +78,7 @@ const getCoursesBySubCategoryId = async (subCategoryId) => {
  * @param {ObjectId} courseId
  * @returns {Promise<Course>}
  */
-const deleteCourse = async (courseId) => {
+const deleteCourseById = async (courseId) => {
   const course = await getCourseById(courseId);
   if (!course) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
@@ -93,7 +93,7 @@ const deleteCourse = async (courseId) => {
  * @param {Object} updateBody
  * @returns {Promise<Course>}
  */
-const updateCourse = async (courseId, updateBody) => {
+const updateCourseById = async (courseId, updateBody) => {
   const course = await getCourseById(courseId);
   if (!course) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
@@ -143,8 +143,10 @@ const increaseSubscriberNumberByCourseId = async (courseId) => {
 const getCourseDetailsById = (id) => {
   const populateObj = {
     path: 'sections',
+    options: { sort: { ordinalNumber: 1 } },
     populate: {
       path: 'lectures',
+      options: { sort: { ordinalNumber: 1 } },
       populate: {
         path: 'video',
         select: 'videoUrl',
@@ -178,8 +180,8 @@ module.exports = {
   getAllCourses,
   queryCourses,
   createCourse,
-  deleteCourse,
-  updateCourse,
+  deleteCourseById,
+  updateCourseById,
   getCoursesBySubCategoryId,
   increaseViewByCourseId,
   increaseSubscriberNumberByCourseId,

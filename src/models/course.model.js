@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
+const { courseConstant } = require('../constants');
 
 const courseSchema = mongoose.Schema(
   {
@@ -8,8 +9,8 @@ const courseSchema = mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
-      minlength: 20,
-      maxlength: 60,
+      minlength: courseConstant.COURSE_NAME_MIN_LENGTH,
+      maxlength: courseConstant.COURSE_NAME_MAX_LENGTH,
     },
     subCategoryId: {
       type: String,
@@ -25,15 +26,15 @@ const courseSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 100,
-      maxlength: 300,
+      minlength: courseConstant.COURSE_SHORT_DESCRIPTION_MIN_LENGTH,
+      maxlength: courseConstant.COURSE_SHORT_DESCRIPTION_MAX_LENGTH,
     },
     detailDescription: {
       type: String,
       required: true,
       trim: true,
-      minlength: 1000,
-      maxlength: 2000,
+      minlength: courseConstant.COURSE_DETAIL_DESCRIPTION_MIN_LENGTH,
+      maxlength: courseConstant.COURSE_DETAIL_DESCRIPTION_MAX_LENGTH,
     },
     image: {
       type: String,
@@ -41,45 +42,45 @@ const courseSchema = mongoose.Schema(
     },
     status: {
       type: Boolean,
-      default: false,
+      default: courseConstant.COURSE_STATUS_DEFAULT_VALUE,
     },
     fee: {
       type: Number,
-      default: 0,
-      min: 0,
-      max: 500,
+      default: courseConstant.COURSE_FEE_DEFAULT_VALUE,
+      min: courseConstant.COURSE_FEE_MIN_VALUE,
+      max: courseConstant.COURSE_FEE_MAX_VALUE,
     },
     subscriberNumber: {
       type: Number,
-      default: 0,
-      min: 0,
+      default: courseConstant.COURSE_SUBSCRIBER_NUMBER_DEFAULT_VALUE,
+      min: courseConstant.COURSE_SUBSCRIBER_NUMBER_MIN_VALUE,
     },
     view: {
       type: Number,
-      default: 0,
-      min: 0,
+      default: courseConstant.COURSE_VIEW_DEFAULT_VALUE,
+      min: courseConstant.COURSE_VIEW_MIN_VALUE,
     },
     rating: {
       type: Number,
-      default: 0,
-      min: 0,
-      max: 5,
+      default: courseConstant.COURSE_RATING_DEFAULT_VALUE,
+      min: courseConstant.COURSE_RATING_MIN_VALUE,
+      max: courseConstant.COURSE_RATING_MAX_VALUE,
     },
     ratingCount: {
       type: Number,
-      default: 0,
+      default: courseConstant.COURSE_RATING_COUNT_DEFAULT_VALUE,
     },
     originalFee: {
       type: Number,
-      default: 0,
-      min: 0,
-      max: 500,
+      default: courseConstant.COURSE_ORIGINAL_FEE_DEFAULT_VALUE,
+      min: courseConstant.COURSE_ORIGINAL_FEE_MIN_VALUE,
+      max: courseConstant.COURSE_ORIGINAL_FEE_MAX_VALUE,
     },
     promotionStart: {
       type: Date,
     },
     promotionEnd: {
-      type: Date, 
+      type: Date,
     },
     updated_at: {
       type: Date,
