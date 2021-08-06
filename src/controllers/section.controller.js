@@ -28,8 +28,45 @@ const getSectionsDetails = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const updateSection = catchAsync(async (req, res) => {
+  const section = await sectionService.updateSectionById(req.params.sectionId, req.body);
+  res.send(section);
+});
+
+const swapSectionOrdinalNumber = catchAsync(async (req, res) => {
+  const { firstSectionId, secondSectionId } = req.body;
+
+  const firstSection = await sectionService.getSectionById(firstSectionId);
+
+  const secondSection = await sectionService.getSectionById(secondSectionId);
+
+  if (firstSection.courseId !== secondSection.courseId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Sections not in the same course');
+  }
+
+  const firstOrdinalNumber = secondSection.ordinalNumber;
+
+  const secondOrdinalNumber = firstSection.ordinalNumber;
+
+  const firstUpdateBody = {
+    ordinalNumber: firstOrdinalNumber,
+  };
+
+  const secondUpdateBody = {
+    ordinalNumber: secondOrdinalNumber,
+  };
+
+  const firstSectionRes = await sectionService.updateSectionById(firstSectionId, firstUpdateBody);
+
+  const secondSectionRes = await sectionService.updateSectionById(secondSectionId, secondUpdateBody);
+
+  res.send([firstSectionRes, secondSectionRes]);
+});
+
 module.exports = {
   createSection,
   getSections,
   getSectionsDetails,
+  updateSection,
+  swapSectionOrdinalNumber,
 };

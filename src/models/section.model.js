@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
+const { sectionConstant } = require('../constants');
 
 const sectionSchema = mongoose.Schema(
   {
@@ -11,13 +12,13 @@ const sectionSchema = mongoose.Schema(
     title: {
       type: String,
       required: true,
-      minlength: 10,
-      maxlength: 70,
+      minlength: sectionConstant.SECTION_NAME_MIN_LENGTH,
+      maxlength: sectionConstant.SECTION_NAME_MAX_LENGTH,
     },
     ordinalNumber: {
       type: Number,
       required: true,
-      min: 0,
+      min: sectionConstant.SECTION_ORDINAL_NUMBER_MIN_VALUE,
     },
   },
   {
