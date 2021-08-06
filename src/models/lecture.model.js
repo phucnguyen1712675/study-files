@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
+const { lectureConstant } = require('../constants');
 
 const lectureSchema = mongoose.Schema(
   {
@@ -11,13 +12,13 @@ const lectureSchema = mongoose.Schema(
     title: {
       type: String,
       required: true,
-      minlength: 10,
-      maxlength: 70,
+      minlength: lectureConstant.LECTURE_NAME_MIN_LENGTH,
+      maxlength: lectureConstant.LECTURE_NAME_MAX_LENGTH,
     },
     ordinalNumber: {
       type: Number,
       required: true,
-      min: 0,
+      min: lectureConstant.LECTURE_ORDINAL_NUMBER_MIN_VALUE,
     },
     canPreview: {
       type: Boolean,

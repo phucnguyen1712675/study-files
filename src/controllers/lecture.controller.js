@@ -56,8 +56,63 @@ const testCreateLecture = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(lecture);
 });
 
+const updateLecture = catchAsync(async (req, res) => {
+  var newBody;
+
+  if (!req.body.video) {
+    newBody = { ...req.body };
+  } else {
+    const { video } = req.body;
+
+    const { url } = await cloudinary.uploader.upload_large(video, {
+      resource_type: 'video',
+      upload_preset: COURSE_VIDEOS_UPLOAD_PRESET,
+    });
+
+    newBody = {
+      ...req.body,
+      videoUrl: url,
+    };
+  }
+
+  const lecture = await lectureService.updateLectureById(req.params.lectureId, newBody);
+  res.send(lecture);
+});
+
+const swapLectureOrdinalNumber = catchAsync(async (req, res) => {
+  const { firstLectureId, secondLectureId } = req.body;
+
+  const firstLecture = await lectureService.getLectureById(firstLectureId);
+
+  const secondLecture = await lectureService.getLectureById(secondLectureId);
+
+  if (firstLecture.sectionId !== secondLecture.sectionId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Lectures not in the same section');
+  }
+
+  const firstOrdinalNumber = secondLecture.ordinalNumber;
+
+  const secondOrdinalNumber = firstLecture.ordinalNumber;
+
+  const firstUpdateBody = {
+    ordinalNumber: firstOrdinalNumber,
+  };
+
+  const secondUpdateBody = {
+    ordinalNumber: secondOrdinalNumber,
+  };
+
+  const firstLectureRes = await lectureService.updateLectureById(firstLectureId, firstUpdateBody);
+
+  const secondLectureRes = await lectureService.updateLectureById(secondLectureId, secondUpdateBody);
+
+  res.send([firstLectureRes, secondLectureRes]);
+});
+
 module.exports = {
   createLecture,
   getLectures,
   testCreateLecture,
+  updateLecture,
+  swapLectureOrdinalNumber,
 };
