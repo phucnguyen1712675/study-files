@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { userService } = require('../services');
+const { userService, courseService } = require('../services');
 const { TEACHER_AVATAR_UPLOAD_PRESET } = require('../constants/cloudinary');
 const { cloudinary } = require('../utils/cloudinary');
 
@@ -13,8 +13,6 @@ const createUser = catchAsync(async (req, res) => {
 
 const getUsers = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'role']);
-  // const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  // const result = await userService.queryUsers(filter, options);
   const result = await userService.queryUsers(filter);
   res.send(result);
 });
@@ -53,6 +51,7 @@ const updateUserPassword = catchAsync(async (req, res) => {
 
 const deleteUser = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.params.userId);
+  await courseService.deleteCoursesByUserId(req.params.userId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
