@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Course, SubCategory } = require('../models');
+const { Course, SubCategory, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -175,6 +175,22 @@ const updateRatingAndRatingCount = async (courseId, score) => {
   return course;
 };
 
+/**
+ * delete all courses by user id if user is teacher
+ * @param {ObjectId} userId
+ */
+const deleteCoursesByUserId = async (userId) => {
+  const user = await User.findById(userId);
+  if (user.role === 'teacher') {
+    const courses = await Course.find({ teacherId: userId });
+    await Promise.all(
+      courses.map(async (course) => {
+        return await deleteCourseById(course.id);
+      })
+    );
+  }
+};
+
 module.exports = {
   getCourseById,
   getAllCourses,
@@ -187,4 +203,5 @@ module.exports = {
   increaseSubscriberNumberByCourseId,
   updateRatingAndRatingCount,
   getCourseDetailsById,
+  deleteCoursesByUserId,
 };
