@@ -24,14 +24,14 @@ const createLecture = catchAsync(async (req, res) => {
   } else {
     const { video } = req.body;
 
-    const { url } = await cloudinary.uploader.upload_large(video, {
+    const { secure_url } = await cloudinary.uploader.upload_large(video, {
       resource_type: 'video',
       upload_preset: COURSE_VIDEOS_UPLOAD_PRESET,
     });
 
     newLecture = {
       ...req.body,
-      videoUrl: url,
+      videoUrl: secure_url,
     };
   }
   const lecture = await lectureService.createLecture(newLecture);
@@ -64,14 +64,14 @@ const updateLecture = catchAsync(async (req, res) => {
   } else {
     const { video } = req.body;
 
-    const { url } = await cloudinary.uploader.upload_large(video, {
+    const { secure_url } = await cloudinary.uploader.upload_large(video, {
       resource_type: 'video',
       upload_preset: COURSE_VIDEOS_UPLOAD_PRESET,
     });
 
     newBody = {
       ...req.body,
-      videoUrl: url,
+      videoUrl: secure_url,
     };
   }
 

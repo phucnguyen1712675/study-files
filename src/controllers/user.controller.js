@@ -33,11 +33,11 @@ const updateUser = catchAsync(async (req, res) => {
   } else {
     const { avatar } = req.body;
 
-    const { url } = await cloudinary.uploader.upload(avatar, {
+    const { secure_url } = await cloudinary.uploader.upload(avatar, {
       upload_preset: TEACHER_AVATAR_UPLOAD_PRESET,
     });
 
-    newBody = { ...req.body, avatar: url };
+    newBody = { ...req.body, avatar: secure_url };
   }
 
   const user = await userService.updateUserById(req.params.userId, newBody, true);
