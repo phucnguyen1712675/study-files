@@ -60,7 +60,7 @@ const queryCourses = async (query, filter, options) => {
 const getCourseById = async (id) => {
   return Course.findById(id)
     .populate({ path: 'subCategory', select: 'name categoryId' })
-    .populate({ path: 'teacher', select: 'name' });
+    .populate({ path: 'teacher', select: 'name email avatar' });
 };
 
 /**
