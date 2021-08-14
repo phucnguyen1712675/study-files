@@ -96,9 +96,6 @@ const deleteUserById = async (userId) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  if(user.role === 'teacher'){
-    // TODO trang delete all courses of this teacher
-  }
   await user.remove();
   return user;
 };
