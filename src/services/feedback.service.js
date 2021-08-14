@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Feedbacks } = require('../models');
+const { Feedbacks, User, Course } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -8,6 +8,12 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Feedback>}
  */
 const createFeedback = async (feedbackBody) => {
+  if (!(await User.findById(feedbackBody.teacherId))) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  if (!(await Course.findById(feedbackBody.courseId))) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+  }
   if (await Feedbacks.isFeedBacked(feedbackBody.teacherId, feedbackBody.ratingId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You have feedback this rating');
   }

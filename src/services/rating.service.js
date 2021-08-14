@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Ratings } = require('../models');
+const { Ratings, User, Course } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -8,6 +8,12 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Rating>}
  */
 const createRating = async (ratingBody) => {
+  if (!(await User.findById(ratingBody.studentId))) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  if (!(await Course.findById(ratingBody.courseId))) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+  }
   if (await Ratings.isRated(ratingBody.studentId, ratingBody.courseId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You have rated this course');
   }
