@@ -52,8 +52,8 @@ const updateUser = {
       email: Joi.string().email(),
       name: Joi.string(),
       avatar: Joi.string(),
-      shortDescription: Joi.string(),
-      detailDescription: Joi.string(),
+      shortDescription: Joi.string().allow(''),
+      detailDescription: Joi.string().allow(''),
     })
     .min(1),
 };
