@@ -22,7 +22,9 @@ const createSubCategory = async (subCategoryBody) => {
  * @returns {Promise<QueryResult>}
  */
 const querySubCategories = async () => {
-  const subCategories = await SubCategory.find().sort({ field: 'desc' }).populate({ path: 'category', select: 'name' });
+  const subCategories = await SubCategory.find()
+    .sort({ subscriberNumber: 'desc' })
+    .populate({ path: 'category', select: 'name' });
   return subCategories;
 };
 
