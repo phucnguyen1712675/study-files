@@ -39,7 +39,7 @@ module.exports = {
     url:
       envVars.NODE_ENV === 'test'
         ? 'mongodb+srv://phucadmin:mimi1234@study-files-cluster.eu58v.mongodb.net/study-files-test?retryWrites=true&w=majority'
-        : envVars.MONGODB_URL,
+        : 'mongodb+srv://phucadmin:mimi1234@study-files-cluster.eu58v.mongodb.net/study-files?retryWrites=true&w=majority',
     options: {
       useCreateIndex: true,
       useNewUrlParser: true,
