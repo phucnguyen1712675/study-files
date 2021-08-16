@@ -11,7 +11,7 @@ router
   .post(auth('manageMyCourses'), validate(myCourseValidation.createMyCourses), myCourseController.createMycourse);
 
 router
-  .route('/:studentId')
+  .route('/:userId')
   .get(
     auth('manageMyCourses'),
     validate(myCourseValidation.getAllMyCoursesOfStudent),
