@@ -11,7 +11,7 @@ const createMycourse = catchAsync(async (req, res) => {
 });
 
 const getAllMyCourseOfStudent = catchAsync(async (req, res) => {
-  const myCourses = await myCourseService.getAllMyCourseOfStudent(req.params.studentId);
+  const myCourses = await myCourseService.getAllMyCourseOfStudent(req.params.userId);
   res.send(myCourses);
 });
 

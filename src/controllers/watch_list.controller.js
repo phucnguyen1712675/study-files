@@ -10,7 +10,7 @@ const createWatchList = catchAsync(async (req, res) => {
 });
 
 const getAllWatchListOfStudent = catchAsync(async (req, res) => {
-  const watchList = await watchListService.getAllWatchListOfStudent(req.params.studentId);
+  const watchList = await watchListService.getAllWatchListOfStudent(req.params.userId);
   res.send(watchList);
 });
 

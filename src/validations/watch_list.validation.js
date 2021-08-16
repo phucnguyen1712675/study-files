@@ -10,7 +10,7 @@ const createWatchList = {
 
 const getAllWatchListOfStudent = {
   params: Joi.object().keys({
-    studentId: Joi.string().custom(objectId),
+    userId: Joi.string().custom(objectId),
   }),
 };
 
