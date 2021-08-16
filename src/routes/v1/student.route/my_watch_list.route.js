@@ -11,7 +11,7 @@ router
   .post(auth('manageWatchList'), validate(watchListValidation.createWatchList), watchListController.createWatchList);
 
 router
-  .route('/:studentId')
+  .route('/:userId')
   .get(
     auth('manageWatchList'),
     validate(watchListValidation.getAllWatchListOfStudent),

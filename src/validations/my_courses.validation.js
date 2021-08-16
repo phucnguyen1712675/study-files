@@ -10,7 +10,7 @@ const createMyCourses = {
 
 const getAllMyCoursesOfStudent = {
   params: Joi.object().keys({
-    studentId: Joi.string().custom(objectId),
+    userId: Joi.string().custom(objectId),
   }),
 };
 
