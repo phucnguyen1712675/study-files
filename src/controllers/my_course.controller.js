@@ -15,14 +15,6 @@ const getAllMyCourseOfStudent = catchAsync(async (req, res) => {
   res.send(myCourses);
 });
 
-// đề không yêu cầu
-// const getMyCourses = catchAsync(async (req, res) => {
-//   const filter = pick(req.query, ['courseId', 'studentId']);
-//   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-//   const result = await myCourseService.queryMyCourse(filter, options);
-//   res.send(result);
-// });
-
 const getMycourse = catchAsync(async (req, res) => {
   const myCourse = await myCourseService.getMyCourseById(req.params.myCourseId);
   if (!myCourse) {
