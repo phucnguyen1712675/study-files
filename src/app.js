@@ -51,15 +51,11 @@ if (config.env === 'production') {
 }
 
 app.get('/', (req, res) => {
-  res.send('hello from studyfile');
+  res.send('hello from study files');
 });
 
 // v1 api routes
 app.use('/v1', routes);
-
-app.get('/', (req, res) => {
-  res.send('hello from studyfile');
-});
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

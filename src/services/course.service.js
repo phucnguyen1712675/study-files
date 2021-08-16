@@ -181,7 +181,7 @@ const updateRatingAndRatingCount = async (courseId, score) => {
  */
 const deleteCoursesByUserId = async (userId) => {
   const user = await User.findById(userId);
-  if (user.role === 'teacher') {
+  if (user && user.role === 'teacher') {
     const courses = await Course.find({ teacherId: userId });
     await Promise.all(
       courses.map(async (course) => {
