@@ -37,14 +37,14 @@ describe('Auth routes', () => {
         id: expect.anything(),
         name: newUser.name,
         email: newUser.email,
-        role: 'user',
+        role: 'student',
         isEmailVerified: false,
       });
 
       const dbUser = await User.findById(res.body.user.id);
       expect(dbUser).toBeDefined();
       expect(dbUser.password).not.toBe(newUser.password);
-      expect(dbUser).toMatchObject({ name: newUser.name, email: newUser.email, role: 'user', isEmailVerified: false });
+      expect(dbUser).toMatchObject({ name: newUser.name, email: newUser.email, role: 'student', isEmailVerified: false });
 
       expect(res.body.tokens).toEqual({
         access: { token: expect.anything(), expires: expect.anything() },
@@ -355,102 +355,102 @@ describe('Auth routes', () => {
     });
   });
 
-  describe('POST /v1/auth/send-verification-email', () => {
-    beforeEach(() => {
-      jest.spyOn(emailService.transport, 'sendMail').mockResolvedValue();
-    });
+  // describe('POST /v1/auth/send-verification-email', () => {
+  //   beforeEach(() => {
+  //     jest.spyOn(emailService.transport, 'sendMail').mockResolvedValue();
+  //   });
 
-    test('should return 204 and send verification email to the user', async () => {
-      await insertUsers([userOne]);
-      const sendVerificationEmailSpy = jest.spyOn(emailService, 'sendVerificationEmail');
+  //   test('should return 204 and send verification email to the user', async () => {
+  //     await insertUsers([userOne]);
+  //     const sendVerificationEmailSpy = jest.spyOn(emailService, 'sendVerificationEmail');
 
-      await request(app)
-        .post('/v1/auth/send-verification-email')
-        .set('Authorization', `Bearer ${userOneAccessToken}`)
-        .expect(httpStatus.NO_CONTENT);
+  //     await request(app)
+  //       .post('/v1/auth/send-verification-email')
+  //       .set('Authorization', `Bearer ${userOneAccessToken}`)
+  //       .expect(httpStatus.NO_CONTENT);
 
-      expect(sendVerificationEmailSpy).toHaveBeenCalledWith(userOne.email, expect.any(String));
-      const verifyEmailToken = sendVerificationEmailSpy.mock.calls[0][1];
-      const dbVerifyEmailToken = await Token.findOne({ token: verifyEmailToken, user: userOne._id });
+  //     expect(sendVerificationEmailSpy).toHaveBeenCalledWith(userOne.email, expect.any(String));
+  //     const verifyEmailToken = sendVerificationEmailSpy.mock.calls[0][1];
+  //     const dbVerifyEmailToken = await Token.findOne({ token: verifyEmailToken, user: userOne._id });
 
-      expect(dbVerifyEmailToken).toBeDefined();
-    });
+  //     expect(dbVerifyEmailToken).toBeDefined();
+  //   });
 
-    test('should return 401 error if access token is missing', async () => {
-      await insertUsers([userOne]);
+  //   test('should return 401 error if access token is missing', async () => {
+  //     await insertUsers([userOne]);
 
-      await request(app).post('/v1/auth/send-verification-email').send().expect(httpStatus.UNAUTHORIZED);
-    });
-  });
+  //     await request(app).post('/v1/auth/send-verification-email').send().expect(httpStatus.UNAUTHORIZED);
+  //   });
+  // });
 
-  describe('POST /v1/auth/verify-email', () => {
-    test('should return 204 and verify the email', async () => {
-      await insertUsers([userOne]);
-      const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
-      const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
-      await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL);
+  // describe('POST /v1/auth/verify-email', () => {
+  //   test('should return 204 and verify the email', async () => {
+  //     await insertUsers([userOne]);
+  //     const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
+  //     const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
+  //     await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL);
 
-      await request(app)
-        .post('/v1/auth/verify-email')
-        .query({ token: verifyEmailToken })
-        .send()
-        .expect(httpStatus.NO_CONTENT);
+  //     await request(app)
+  //       .post('/v1/auth/verify-email')
+  //       .query({ token: verifyEmailToken })
+  //       .send()
+  //       .expect(httpStatus.NO_CONTENT);
 
-      const dbUser = await User.findById(userOne._id);
+  //     const dbUser = await User.findById(userOne._id);
 
-      expect(dbUser.isEmailVerified).toBe(true);
+  //     expect(dbUser.isEmailVerified).toBe(true);
 
-      const dbVerifyEmailToken = await Token.countDocuments({
-        user: userOne._id,
-        type: tokenTypes.VERIFY_EMAIL,
-      });
-      expect(dbVerifyEmailToken).toBe(0);
-    });
+  //     const dbVerifyEmailToken = await Token.countDocuments({
+  //       user: userOne._id,
+  //       type: tokenTypes.VERIFY_EMAIL,
+  //     });
+  //     expect(dbVerifyEmailToken).toBe(0);
+  //   });
 
-    test('should return 400 if verify email token is missing', async () => {
-      await insertUsers([userOne]);
+  //   test('should return 400 if verify email token is missing', async () => {
+  //     await insertUsers([userOne]);
 
-      await request(app).post('/v1/auth/verify-email').send().expect(httpStatus.BAD_REQUEST);
-    });
+  //     await request(app).post('/v1/auth/verify-email').send().expect(httpStatus.BAD_REQUEST);
+  //   });
 
-    test('should return 401 if verify email token is blacklisted', async () => {
-      await insertUsers([userOne]);
-      const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
-      const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
-      await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL, true);
+  //   test('should return 401 if verify email token is blacklisted', async () => {
+  //     await insertUsers([userOne]);
+  //     const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
+  //     const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
+  //     await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL, true);
 
-      await request(app)
-        .post('/v1/auth/verify-email')
-        .query({ token: verifyEmailToken })
-        .send()
-        .expect(httpStatus.UNAUTHORIZED);
-    });
+  //     await request(app)
+  //       .post('/v1/auth/verify-email')
+  //       .query({ token: verifyEmailToken })
+  //       .send()
+  //       .expect(httpStatus.UNAUTHORIZED);
+  //   });
 
-    test('should return 401 if verify email token is expired', async () => {
-      await insertUsers([userOne]);
-      const expires = moment().subtract(1, 'minutes');
-      const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
-      await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL);
+  //   test('should return 401 if verify email token is expired', async () => {
+  //     await insertUsers([userOne]);
+  //     const expires = moment().subtract(1, 'minutes');
+  //     const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
+  //     await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL);
 
-      await request(app)
-        .post('/v1/auth/verify-email')
-        .query({ token: verifyEmailToken })
-        .send()
-        .expect(httpStatus.UNAUTHORIZED);
-    });
+  //     await request(app)
+  //       .post('/v1/auth/verify-email')
+  //       .query({ token: verifyEmailToken })
+  //       .send()
+  //       .expect(httpStatus.UNAUTHORIZED);
+  //   });
 
-    test('should return 401 if user is not found', async () => {
-      const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
-      const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
-      await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL);
+  //   test('should return 401 if user is not found', async () => {
+  //     const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
+  //     const verifyEmailToken = tokenService.generateToken(userOne._id, expires);
+  //     await tokenService.saveToken(verifyEmailToken, userOne._id, expires, tokenTypes.VERIFY_EMAIL);
 
-      await request(app)
-        .post('/v1/auth/verify-email')
-        .query({ token: verifyEmailToken })
-        .send()
-        .expect(httpStatus.UNAUTHORIZED);
-    });
-  });
+  //     await request(app)
+  //       .post('/v1/auth/verify-email')
+  //       .query({ token: verifyEmailToken })
+  //       .send()
+  //       .expect(httpStatus.UNAUTHORIZED);
+  //   });
+  // });
 });
 
 describe('Auth middleware', () => {
@@ -559,18 +559,18 @@ describe('Auth middleware', () => {
     expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: httpStatus.FORBIDDEN, message: 'Forbidden' }));
   });
 
-  test('should call next with no errors if user does not have required rights but userId is in params', async () => {
-    await insertUsers([userOne]);
-    const req = httpMocks.createRequest({
-      headers: { Authorization: `Bearer ${userOneAccessToken}` },
-      params: { userId: userOne._id.toHexString() },
-    });
-    const next = jest.fn();
+  // test('should call next with no errors if user does not have required rights but userId is in params', async () => {
+  //   await insertUsers([userOne]);
+  //   const req = httpMocks.createRequest({
+  //     headers: { Authorization: `Bearer ${userOneAccessToken}` },
+  //     params: { userId: userOne._id.toHexString() },
+  //   });
+  //   const next = jest.fn();
 
-    await auth('anyRight')(req, httpMocks.createResponse(), next);
+  //   await auth('anyRight')(req, httpMocks.createResponse(), next);
 
-    expect(next).toHaveBeenCalledWith();
-  });
+  //   expect(next).toHaveBeenCalledWith();
+  // });
 
   test('should call next with no errors if user has required rights', async () => {
     await insertUsers([admin]);

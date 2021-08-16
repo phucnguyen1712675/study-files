@@ -36,9 +36,10 @@ module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   mongoose: {
-    url: `mongodb+srv://phucadmin:mimi1234@study-files-cluster.eu58v.mongodb.net/study-files?retryWrites=true&w=majority${
-      envVars.NODE_ENV === 'test' ? '-test' : ''
-    }`,
+    url:
+      envVars.NODE_ENV === 'test'
+        ? 'mongodb+srv://phucadmin:mimi1234@study-files-cluster.eu58v.mongodb.net/study-files-test?retryWrites=true&w=majority'
+        : envVars.MONGODB_URL,
     options: {
       useCreateIndex: true,
       useNewUrlParser: true,
