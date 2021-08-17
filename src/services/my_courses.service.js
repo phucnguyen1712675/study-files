@@ -11,7 +11,13 @@ const createMyCourse = async (myCourseBody) => {
   if (await MyCourse.isExists(myCourseBody.courseId, myCourseBody.studentId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Already exists');
   }
-  const myCourse = await MyCourse.create(myCourseBody);
+
+  const newMyCourse = {
+    ...myCourseBody,
+    created_at: Date.now(),
+  };
+
+  const myCourse = await MyCourse.create(newMyCourse);
   return myCourse;
 };
 
@@ -62,10 +68,28 @@ const deleteMyCourseById = async (myCourseId) => {
   return myCourse;
 };
 
+/**
+ * get top course by myCourseId
+ * @param {number} limit
+ * @param {Date} fromDate
+ * @return {Promise<Object>}
+ */
+const getMostOutstandingCourses = async (limit, fromDate) => {
+  const results = await MyCourse.aggregate([
+    {
+      $match: { created_at: { $gte: new Date(fromDate), $lt: Date.now } },
+    },
+    { $group: { _id: '$courseId', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+  ]).limit(limit);
+  return results;
+};
+
 module.exports = {
   createMyCourse,
   getAllMyCourseOfStudent,
   getMyCourseById,
   queryMyCourse,
   deleteMyCourseById,
+  getMostOutstandingCourses,
 };

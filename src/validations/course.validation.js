@@ -80,10 +80,22 @@ const deleteCourse = {
   }),
 };
 
+const getMostOutstandingCourses = {
+  query: Joi.object().keys({
+    limit: Joi.number().integer().default(courseConstant.COURSE_MOST_OUTSTANDING_NUMBER_VALUE),
+  }),
+  body: Joi.object()
+    .keys({
+      fromDate: Joi.date().required(),
+    })
+    .min(1),
+};
+
 module.exports = {
   createCourse,
   getCourses,
   getCourse,
   updateCourse,
   deleteCourse,
+  getMostOutstandingCourses,
 };

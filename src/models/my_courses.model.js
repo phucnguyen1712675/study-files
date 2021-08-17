@@ -13,6 +13,9 @@ const myCoursesSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    created_at: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
