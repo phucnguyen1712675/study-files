@@ -191,6 +191,23 @@ const deleteCoursesByUserId = async (userId) => {
   }
 };
 
+/**
+ * get top course by myCourseId
+ * @param {Array<ObjectId>} courseIds
+ * @return {Promise<QueryResult>}
+ */
+const getMostOutstandingCourses = async (courseIds) => {
+  const results = await Promise.all(
+    courseIds.map(
+      async (id) =>
+        await Course.findById(id)
+          .populate({ path: 'subCategory', select: 'name categoryId' })
+          .populate({ path: 'teacher', select: 'name email avatar shortDescription' })
+    )
+  );
+  return results;
+};
+
 module.exports = {
   getCourseById,
   getAllCourses,
@@ -204,4 +221,5 @@ module.exports = {
   updateRatingAndRatingCount,
   getCourseDetailsById,
   deleteCoursesByUserId,
+  getMostOutstandingCourses,
 };

@@ -7,6 +7,10 @@ const router = express.Router();
 
 router.route('/').get(validate(courseValidation.getCourses), courseController.getCourses);
 
+router
+  .route('/most-outstanding-courses')
+  .get(validate(courseValidation.getMostOutstandingCourses), courseController.getMostOutstandingCourses);
+
 router.route('/:courseId').get(validate(courseValidation.getCourse), courseController.getCourse);
 
 router.route('/:courseId/details').get(validate(courseValidation.getCourse), courseController.getCourseDetails);
