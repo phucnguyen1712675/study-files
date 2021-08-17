@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
+const { subCategoryConstant } = require('../constants');
 
 const createSubCategory = {
   body: Joi.object().keys({
@@ -44,6 +45,13 @@ const deleteSubCategory = {
   }),
 };
 
+const getMostSaleSubCategories = {
+  query: Joi.object().keys({
+    limit: Joi.number().integer().default(subCategoryConstant.SUB_CATEGORY_MOST_OUTSTANDING_NUMBER_VALUE),
+    fromDate: Joi.date().required(),
+  }),
+};
+
 module.exports = {
   createSubCategory,
   getSubCategory,
@@ -51,4 +59,5 @@ module.exports = {
   updateSubCategory,
   increaseSubcriberNumberSubCategory,
   deleteSubCategory,
+  getMostSaleSubCategories,
 };

@@ -91,12 +91,14 @@ const getCourseDetails = catchAsync(async (req, res) => {
 });
 
 const getMostOutstandingCourses = catchAsync(async (req, res) => {
-  const { limit } = req.query;
-  const { fromDate } = req.body;
+  const { limit, fromDate } = req.query;
 
   const results = await myCourseService.getMostOutstandingCourses(limit, fromDate);
+
   const courseIds = results.map((item) => item._id);
+
   const resultCourses = await courseService.getMostOutstandingCourses(courseIds);
+
   res.send(resultCourses);
 });
 
