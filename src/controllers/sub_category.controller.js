@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { subCategoryService, courseService } = require('../services');
+const { subCategoryService, courseService, myCourseService } = require('../services');
 
 const createSubCategory = catchAsync(async (req, res) => {
   const subCategory = await subCategoryService.createSubCategory(req.body);
@@ -45,6 +45,18 @@ const deleteSubCategory = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getMostSaleSubCategories = catchAsync(async (req, res) => {
+  const { limit, fromDate } = req.query;
+
+  const results = await myCourseService.getMostSaleSubCategories(limit, fromDate);
+
+  const subCategoryIds = results.map((item) => item._id);
+
+  const resultCourses = await subCategoryService.getMostSaleSubCategories(subCategoryIds);
+
+  res.send(resultCourses);
+});
+
 module.exports = {
   createSubCategory,
   getSubCategories,
@@ -53,4 +65,5 @@ module.exports = {
   updateSubCategory,
   increaseSubcriberNumberSubCategory,
   deleteSubCategory,
+  getMostSaleSubCategories,
 };

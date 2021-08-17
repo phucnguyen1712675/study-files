@@ -85,6 +85,36 @@ const getMostOutstandingCourses = async (limit, fromDate) => {
   return results;
 };
 
+/**
+ * get top sub categories by myCourseId
+ * @param {number} limit
+ * @param {Date} fromDate
+ * @return {Promise<Object>}
+ */
+const getMostSaleSubCategories = async (limit, fromDate) => {
+  const results = await MyCourse.aggregate([
+    {
+      $match: { created_at: { $gte: new Date(fromDate), $lt: Date.now } },
+    },
+    { $project: { courseObjId: { $toObjectId: '$courseId' } } },
+    {
+      $lookup: {
+        localField: 'courseObjId',
+        from: 'courses',
+        foreignField: '_id',
+        as: 'course',
+      },
+    },
+    {
+      $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ['$course', 0] }, '$$ROOT'] } },
+    },
+    { $project: { course: 0 } },
+    { $group: { _id: '$subCategoryId', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+  ]).limit(limit);
+  return results;
+};
+
 module.exports = {
   createMyCourse,
   getAllMyCourseOfStudent,
@@ -92,4 +122,5 @@ module.exports = {
   queryMyCourse,
   deleteMyCourseById,
   getMostOutstandingCourses,
+  getMostSaleSubCategories,
 };

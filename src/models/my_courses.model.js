@@ -30,11 +30,11 @@ myCoursesSchema.plugin(paginate);
  * check if courseId and studentId is taken
  * @param {String} courseId
  * @param {String} studentId
- * @param {ObjectId} [excludeMycoursesId]
+ * @param {ObjectId} [excludeMyCoursesId]
  * @returns {Promise<boolean>}
  */
-myCoursesSchema.statics.isExists = async function (courseId, studentId, excludeMycoursesId) {
-  const myCourse = await this.findOne({ courseId, studentId, _id: { $ne: excludeMycoursesId } });
+myCoursesSchema.statics.isExists = async function (courseId, studentId, excludeMyCoursesId) {
+  const myCourse = await this.findOne({ courseId, studentId, _id: { $ne: excludeMyCoursesId } });
   return !!myCourse;
 };
 
