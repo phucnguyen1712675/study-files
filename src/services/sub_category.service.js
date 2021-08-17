@@ -128,6 +128,18 @@ const deleteSubCategoryById = async (subCategoryId) => {
   return subCategory;
 };
 
+/**
+ * get top sub categories by subCategoryId
+ * @param {Array<ObjectId>} subCategoriesIds
+ * @return {Promise<QueryResult>}
+ */
+const getMostSaleSubCategories = async (subCategoriesIds) => {
+  const results = await Promise.all(
+    subCategoriesIds.map(async (id) => await SubCategory.findById(id).populate({ path: 'category', select: 'name' }))
+  );
+  return results;
+};
+
 module.exports = {
   createSubCategory,
   querySubCategories,
@@ -138,4 +150,5 @@ module.exports = {
   getSubCategoryByName,
   deleteSubCategoryById,
   updateSubCategoryById,
+  getMostSaleSubCategories,
 };
