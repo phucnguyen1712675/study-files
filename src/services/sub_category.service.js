@@ -130,12 +130,21 @@ const deleteSubCategoryById = async (subCategoryId) => {
 
 /**
  * get top sub categories by subCategoryId
- * @param {Array<ObjectId>} subCategoriesIds
+ * @param {Array<ObjectId>} array
  * @return {Promise<QueryResult>}
  */
-const getMostSaleSubCategories = async (subCategoriesIds) => {
+const getMostSaleSubCategories = async (array) => {
   const results = await Promise.all(
-    subCategoriesIds.map(async (id) => await SubCategory.findById(id).populate({ path: 'category', select: 'name' }))
+    array.map(async (item) => {
+      const subCate = await SubCategory.findById(item._id).populate({ path: 'category', select: 'name' }).lean();
+
+      const result = {
+        ...subCate,
+        count: item.count,
+      };
+
+      return result;
+    })
   );
   return results;
 };
