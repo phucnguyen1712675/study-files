@@ -50,11 +50,9 @@ const getMostSaleSubCategories = catchAsync(async (req, res) => {
 
   const results = await myCourseService.getMostSaleSubCategories(limit, fromDate);
 
-  const subCategoryIds = results.map((item) => item._id);
+  const resultSubCategories = await subCategoryService.getMostSaleSubCategories(results);
 
-  const resultCourses = await subCategoryService.getMostSaleSubCategories(subCategoryIds);
-
-  res.send(resultCourses);
+  res.send(resultSubCategories);
 });
 
 module.exports = {
