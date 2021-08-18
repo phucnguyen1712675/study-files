@@ -22,7 +22,7 @@ const createCourse = async (courseBody) => {
 const getAllCourses = async () => {
   const courses = await Course.find()
     .populate({ path: 'subCategory', select: 'name' })
-    .populate({ path: 'teacher', select: 'name' });
+    .populate({ path: 'teacher', select: 'name email avatar shortDescription' });
   return courses;
 };
 
