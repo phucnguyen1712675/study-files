@@ -7,6 +7,7 @@ Corresponding frontend: https://study-files.vercel.app
 * [Features](#features)
 * [Project Status](#project-status)
 * [Acknowledgements](#acknowledgements)
+* [Team Member](#team-member)
 
 
 ## General Information
@@ -36,7 +37,7 @@ Project is _completed_.
 
 
 
-## Team
+## Team Member
 | Student ID|           Fullname     |              Email           |
 |:---------:|:----------------------:|:----------------------------:|
 | 1712675   | Nguyễn Thành Vĩnh Phúc | 1712675@student.hcmus.edu.vn |
