@@ -24,7 +24,6 @@ Corresponding frontend: https://study-files.vercel.app
 ## Features
 - Authentication with accessToken and refreshToken mechanism
 - Input Validation using Json Schema
-- 
 
 
 ## Project Status
@@ -33,7 +32,7 @@ Project is _completed_.
 
 
 ## Acknowledgements
-- This project was based on [this boilerplate project](https://github.com/hagopj13/node-express-boilerplate).
+- This project was based on [this boilerplate](https://github.com/hagopj13/node-express-boilerplate).
 
 
 
